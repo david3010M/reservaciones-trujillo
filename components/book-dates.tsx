@@ -1,5 +1,5 @@
 "use client";
-import { CalendarIcon, ChevronRight } from "lucide-react";
+import { CalendarIcon, ChevronRight, MapPin } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
@@ -16,10 +16,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
+import { Input } from "./ui/input";
 
 export default function BookDates() {
   const [fromDate, setOriginDate] = useState<Date | undefined>(new Date());
-  const [toDate, setToDate] = useState<Date | undefined>(undefined);
+  const [toDate, setToDate] = useState<Date | undefined>(
+    new Date(new Date().setDate(new Date().getDate() + 1))
+  );
 
   useEffect(() => {
     if (fromDate && toDate && fromDate > toDate) {
@@ -30,19 +33,18 @@ export default function BookDates() {
   return (
     <section className="bg-white py-4 shadow-md relative -mt-20 mx-auto max-w-5xl rounded-md z-10">
       <div className="flex flex-col md:flex-row items-center justify-between px-4 gap-4">
-        <div className="w-full md:w-1/4">
+        <div className="w-full">
           <Select>
             <SelectTrigger className="w-full border-none">
-              <SelectValue placeholder="Select a fruit" />
+              <MapPin className="text-hotel-gold" />
+              <SelectValue placeholder="Tipo de Recepción" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectLabel>Fruits</SelectLabel>
-                <SelectItem value="apple">Apple</SelectItem>
-                <SelectItem value="banana">Banana</SelectItem>
-                <SelectItem value="blueberry">Blueberry</SelectItem>
-                <SelectItem value="grapes">Grapes</SelectItem>
-                <SelectItem value="pineapple">Pineapple</SelectItem>
+                <SelectLabel>Tipo de Recepción</SelectLabel>
+                <SelectItem value="tipo1">Tipo 1</SelectItem>
+                <SelectItem value="tipo2">Tipo 2</SelectItem>
+                <SelectItem value="tipo3">Tipo 3</SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>
@@ -127,15 +129,15 @@ export default function BookDates() {
             />
           </PopoverContent>
         </Popover>
-        <div className="w-full md:w-1/4 flex space-x-2">
-          <input
+        <div className="flex items-center gap-2 w-full border-s">
+          <Input
             type="text"
             placeholder="Ingresa tu código"
-            className="flex-grow border border-gray-300 rounded-md py-2 px-4"
+            className="flex-grow border-none !text-sm py-2 px-4"
           />
-          <button className="bg-[#d69c4f] text-white py-2 px-6 rounded-md">
+          <Button className="bg-[#d69c4f] text-white py-2 px-6 rounded-md">
             Buscar
-          </button>
+          </Button>
         </div>
       </div>
     </section>
