@@ -1,5 +1,4 @@
 "use client";
-
 import { CalendarIcon, ChevronRight } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Button } from "./ui/button";
@@ -20,9 +19,13 @@ import {
 
 export default function BookDates() {
   const [fromDate, setOriginDate] = useState<Date | undefined>(new Date());
-  const [toDate, setToDate] = useState<Date | undefined>(
-    () => new Date(Date.now() + 86400000)
-  );
+  const [toDate, setToDate] = useState<Date | undefined>(undefined);
+
+  useEffect(() => {
+    if (fromDate && toDate && fromDate > toDate) {
+      setToDate(fromDate);
+    }
+  }, [fromDate, toDate]);
 
   return (
     <section className="bg-white py-4 shadow-md relative -mt-20 mx-auto max-w-5xl rounded-md z-10">
