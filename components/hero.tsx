@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function Hero() {
   return (
-    <section className="relative h-[500px]">
+    <section className="relative h-[600px]">
       <Image
         src="/heroinicio.png?height=500&width=1200"
         alt="Sunset pier view"

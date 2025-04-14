@@ -31,7 +31,7 @@ export default function BookDates() {
   }, [fromDate, toDate]);
 
   return (
-    <section className="bg-white py-4 shadow-md relative -mt-20 mx-auto max-w-5xl rounded-md z-10">
+    <section className="bg-white py-4 shadow-md relative -mt-12 mx-auto max-w-5xl rounded-md z-10">
       <div className="flex flex-col md:flex-row items-center justify-between px-4 gap-4">
         <div className="w-full">
           <Select>

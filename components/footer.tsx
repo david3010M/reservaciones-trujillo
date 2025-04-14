@@ -1,38 +1,41 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Footer() {
   return (
     <footer>
-      <div className="bg-[#f0e9df] py-6 border-t border-[#e5d3bb]">
-        <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
+      <div className="bg-hotel-lightBeige py-8">
+        <div className="max-w-screen-lg mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
           <div>
             <p className="text-sm">
-              Ubicanos en: Av. Túpac Amaru 812 - Trujillo
+              Ubicanos en:{" "}
+              <Link
+                href="https://maps.app.goo.gl/fVx8asbgJ7MMudZY7"
+                target="_blank"
+                className="underline"
+              >
+                Av. Túpac Amaru 812 - Trujillo
+              </Link>
             </p>
           </div>
-          <div>
-            <p className="text-sm">Medios de pago:</p>
-            <div className="flex space-x-2 mt-2">
+          <div className="flex gap-8 items-center">
+            <p className="font-medium">Medios de pago</p>
+            <div className="flex gap-2 mt-2">
+              <Image src="/icons/visa.png" alt="Visa" width={40} height={30} />
               <Image
-                src="/placeholder.svg?height=30&width=40"
-                alt="Visa"
-                width={40}
-                height={30}
-              />
-              <Image
-                src="/placeholder.svg?height=30&width=40"
+                src="/icons/master.png"
                 alt="Mastercard"
                 width={40}
                 height={30}
               />
               <Image
-                src="/placeholder.svg?height=30&width=40"
+                src="/icons/american.png"
                 alt="American Express"
                 width={40}
                 height={30}
               />
               <Image
-                src="/placeholder.svg?height=30&width=40"
+                src="/icons/diners.png"
                 alt="Diners Club"
                 width={40}
                 height={30}
@@ -42,7 +45,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="bg-[#000000] text-white py-8">
-        <div className="container mx-auto px-4">
+        <div className="max-w-screen-lg mx-auto px-4">
           <div className="flex flex-col md:flex-row">
             <div className="w-full md:w-1/4 mb-6 md:mb-0">
               <Image
@@ -135,7 +138,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="bg-[#000000] text-gray-500 text-xs py-4 border-t border-gray-800">
-        <div className="container mx-auto px-4 text-center">
+        <div className="max-w-screen-lg mx-auto px-4 text-center">
           Recepciones Trujillo ©2023 Todos los derechos reservados.
         </div>
       </div>
