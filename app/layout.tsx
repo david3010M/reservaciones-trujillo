@@ -1,6 +1,6 @@
 import type React from "react";
 import "./globals.css";
-import { Poppins, Playfair_Display } from "next/font/google";
+import { Poppins, Playfair_Display, Radio_Canada } from "next/font/google";
 
 // Poppins font for body text
 const poppins = Poppins({
@@ -18,6 +18,14 @@ const playfair = Playfair_Display({
   variable: "--font-playfair",
 });
 
+// Radio Canada for special text
+const canada = Radio_Canada({
+  weight: ["400"],
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-canada",
+});
+
 export const metadata = {
   title: "Recepciones Trujillo",
   description: "Hotel y centro de eventos en Trujillo, Perú",
@@ -31,11 +39,22 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es">
-      <body className={`${poppins.variable} ${playfair.variable} font-poppins`}>
-        {children}
+      <body
+        className={`${poppins.variable} ${playfair.variable}  ${canada.variable} font-poppins`}
+      >
+        <main className="min-h-screen">
+          {/* Top Bar */}
+          <Header />
+          {/* Main Content */}
+          {children}
+          {/* Footer */}
+          <Footer />
+        </main>
       </body>
     </html>
   );
 }
 
 import "./globals.css";
+import Header from "@/components/header";
+import Footer from "@/components/footer";

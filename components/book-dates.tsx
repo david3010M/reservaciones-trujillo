@@ -135,7 +135,10 @@ export default function BookDates() {
             placeholder="Ingresa tu código"
             className="flex-grow border-none !text-sm py-2 px-4"
           />
-          <Button className="bg-[#d69c4f] text-white py-2 px-6 rounded-md">
+          <Button
+            className="bg-hotel-gold text-white py-2 px-6 rounded-md"
+            ripple="dark"
+          >
             Buscar
           </Button>
         </div>
