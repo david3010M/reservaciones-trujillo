@@ -31,7 +31,7 @@ export default function BookDates() {
   }, [fromDate, toDate]);
 
   return (
-    <section className="bg-white py-4 shadow-md relative -mt-12 mx-auto max-w-5xl rounded-md z-10">
+    <section className="bg-white py-4 shadow-md relative -mt-12 mx-auto max-w-6xl rounded-md z-10">
       <div className="flex flex-col md:flex-row items-center justify-between px-4 gap-4">
         <div className="w-full">
           <Select>
@@ -49,87 +49,89 @@ export default function BookDates() {
             </SelectContent>
           </Select>
         </div>
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button
-              variant={"ghost"}
-              className={cn(
-                "w-[240px] h-fit justify-start text-left font-normal",
-                !fromDate && "text-muted-foreground"
-              )}
-            >
-              <CalendarIcon className="stroke-hotel-gold !size-8" />
-              {fromDate ? (
-                <div className="flex gap-2">
-                  <span className="ml-2 text-3xl font-semibold">
-                    {format(fromDate, "dd")}
-                  </span>
-                  <div className="flex flex-col ml-2">
-                    <span className="text-sm font-semibold uppercase">
-                      {format(fromDate, "MMM yy")}
+        <div className="flex gap-2 justify-center">
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant={"ghost"}
+                className={cn(
+                  "md:min-w-[240px] ripple-lg h-fit justify-start text-left font-normal",
+                  !fromDate && "text-muted-foreground"
+                )}
+              >
+                <CalendarIcon className="stroke-hotel-gold !size-8" />
+                {fromDate ? (
+                  <div className="flex gap-2">
+                    <span className="ml-2 text-3xl font-semibold">
+                      {format(fromDate, "dd")}
                     </span>
-                    <span className="text-xs text-gray-500 uppercase">
-                      {format(fromDate, "EEEE", { locale: es })}
-                    </span>
+                    <div className="flex flex-col ml-2">
+                      <span className="text-sm font-semibold uppercase">
+                        {format(fromDate, "MMM yy")}
+                      </span>
+                      <span className="text-xs text-gray-500 uppercase">
+                        {format(fromDate, "EEEE", { locale: es })}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              ) : (
-                <span className="ml-2 text-sm font-semibold">
-                  Selecciona una fecha
-                </span>
-              )}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="start">
-            <Calendar
-              mode="single"
-              selected={fromDate}
-              onSelect={setOriginDate}
-              initialFocus
-            />
-          </PopoverContent>
-        </Popover>
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button
-              variant={"ghost"}
-              className={cn(
-                "w-[240px] h-fit justify-start text-left font-normal",
-                !toDate && "text-muted-foreground"
-              )}
-            >
-              <CalendarIcon className="stroke-hotel-gold !size-8" />
-              {toDate ? (
-                <div className="flex gap-2">
-                  <span className="ml-2 text-3xl font-semibold">
-                    {format(toDate, "dd")}
+                ) : (
+                  <span className="ml-2 text-sm font-semibold">
+                    Selecciona una fecha
                   </span>
-                  <div className="flex flex-col ml-2">
-                    <span className="text-sm font-semibold uppercase">
-                      {format(toDate, "MMM yy")}
+                )}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <Calendar
+                mode="single"
+                selected={fromDate}
+                onSelect={setOriginDate}
+                initialFocus
+              />
+            </PopoverContent>
+          </Popover>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant={"ghost"}
+                className={cn(
+                  "md:min-w-[240px] ripple-lg h-fit justify-start text-left font-normal",
+                  !toDate && "text-muted-foreground"
+                )}
+              >
+                <CalendarIcon className="stroke-hotel-gold !size-8" />
+                {toDate ? (
+                  <div className="flex gap-2">
+                    <span className="ml-2 text-3xl font-semibold">
+                      {format(toDate, "dd")}
                     </span>
-                    <span className="text-xs text-gray-500 uppercase">
-                      {format(toDate, "EEEE", { locale: es })}
-                    </span>
+                    <div className="flex flex-col ml-2">
+                      <span className="text-sm font-semibold uppercase">
+                        {format(toDate, "MMM yy")}
+                      </span>
+                      <span className="text-xs text-gray-500 uppercase">
+                        {format(toDate, "EEEE", { locale: es })}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              ) : (
-                <span className="ml-2 text-sm font-semibold">
-                  Selecciona una fecha
-                </span>
-              )}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="start">
-            <Calendar
-              mode="single"
-              selected={toDate}
-              onSelect={setToDate}
-              initialFocus
-            />
-          </PopoverContent>
-        </Popover>
-        <div className="flex items-center gap-2 w-full border-s">
+                ) : (
+                  <span className="ml-2 text-sm font-semibold">
+                    Selecciona una fecha
+                  </span>
+                )}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <Calendar
+                mode="single"
+                selected={toDate}
+                onSelect={setToDate}
+                initialFocus
+              />
+            </PopoverContent>
+          </Popover>
+        </div>
+        <div className="flex items-center gap-2 w-full md:border-s">
           <Input
             type="text"
             placeholder="Ingresa tu código"

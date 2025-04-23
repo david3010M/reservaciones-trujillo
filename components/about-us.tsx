@@ -6,7 +6,7 @@ export default function AboutUs() {
     <section className="py-24 bg-hotel-lightBeige -mt-8">
       <div className="max-w-screen-lg mx-auto px-4">
         <div className="relative flex flex-col md:flex-row gap-8">
-          <div className="w-full md:w-1/2 relative">
+          <div className="w-full md:w-1/2 relative hidden md:block">
             <div className="relative h-full mb-4">
               <Image
                 src="/home/welcome1.svg"

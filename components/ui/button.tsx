@@ -9,11 +9,11 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground",
-        destructive: "bg-destructive text-destructive-foreground",
-        outline: "border border-input bg-background ",
-        secondary: "bg-secondary text-secondary-foreground",
-        ghost: "",
+        default: "bg-primary text-primary-foreground ripple-dark",
+        destructive: "bg-destructive text-destructive-foreground ripple-dark",
+        outline: "border border-input bg-background ripple-gold",
+        secondary: "bg-secondary text-secondary-foreground ripple-gold",
+        ghost: "ripple-beige",
         link: "text-primary underline-offset-4",
       },
       size: {

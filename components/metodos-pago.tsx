@@ -5,7 +5,7 @@ export default function MetodosPago() {
   return (
     <section>
       <div className="bg-hotel-lightBeige py-8">
-        <div className="max-w-screen-lg mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
+        <div className="max-w-screen-lg mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
           <div>
             <p className="text-sm">
               Ubicanos en:{" "}

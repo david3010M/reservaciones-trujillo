@@ -4,6 +4,7 @@ import AboutUs from "@/components/about-us";
 import Experience from "@/components/experience";
 import Rooms from "@/components/rooms";
 import Contact from "@/components/contact";
+import MetodosPago from "@/components/metodos-pago";
 
 export default function Home() {
   return (
@@ -25,6 +26,8 @@ export default function Home() {
 
       {/* Contact Section */}
       <Contact />
+
+      <MetodosPago />
     </main>
   );
 }
