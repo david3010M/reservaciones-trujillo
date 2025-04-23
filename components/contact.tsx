@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
@@ -51,6 +52,13 @@ export default function Contact() {
                   type="text"
                   placeholder="Teléfono*"
                   className="w-1/2 p-3 bg-hotel-darkBeige rounded-md border-none"
+                  maxLength={9}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (!/^\d{0,9}$/.test(value)) {
+                      e.target.value = value.slice(0, -1);
+                    }
+                  }}
                 />
                 <Select>
                   <SelectTrigger className="w-1/2 p-3 bg-hotel-darkBeige rounded-md border-none data-[placeholder]:text-gray-500">
