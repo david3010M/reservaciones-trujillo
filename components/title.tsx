@@ -9,7 +9,7 @@ export interface TitleProps {
 export default function Title({
   title,
   description,
-  height = "270px",
+  height = "200px",
   width = "100%",
   className,
 }: TitleProps) {

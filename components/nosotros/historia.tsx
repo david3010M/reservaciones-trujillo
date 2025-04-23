@@ -2,8 +2,8 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { Quote } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { motion, AnimatePresence } from "framer-motion";
 
 export const dynamic = "force-dynamic";
 type Section = "historia" | "mision" | "vision" | "valores";
@@ -116,35 +116,62 @@ export default function QuienesSomos() {
           </div>
           <div className="font-canada">{sections[section].content}</div>
         </div>
-        <div className="flex w-full relative rounded-sm overflow-hidden shadow-lg order-first lg:order-last col-span-2" style={{ aspectRatio: '1 / 1' }}>
-          <Image
-            src={sections[section].image}
-            alt="Depósito Pakatnamú"
-            fill
-            className="object-cover border-white border-2 shadow-sm"
-          />
-        </div>
+
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={section}
+            initial={{ x: 100, y: 100, opacity: 0 }}
+            animate={{ x: 0, y: 0, opacity: 1 }}
+            exit={{ x: -100, y: -100, opacity: 0 }}
+            transition={{ duration: 0.6, ease: "easeInOut" }}
+            className="relative w-full rounded-sm overflow-hidden shadow-lg order-first lg:order-last col-span-2"
+            style={{ aspectRatio: "1 / 1" }}
+          >
+            <Image
+              src={sections[section].image}
+              alt={`Imagen ${sections[section].title}`}
+              fill
+              className="object-cover border-white border-2 shadow-sm"
+            />
+          </motion.div>
+        </AnimatePresence>
       </div>
 
       <div className="mb-8">
-        <div className="bg-muted rounded-full flex max-w-2xl mx-auto overflow-auto hiddenScroll transparentScroll">
+        <div className="bg-hotel-darkBeige rounded-full flex max-w-2xl mx-auto overflow-auto hiddenScroll transparentScroll">
           {Object.entries(sections).map(([key, { title }], index) => (
             <Button
               key={key}
               size="lg"
-              className="w-full flex items-center justify-center space-x-2 py-3 px-6 rounded-full cursor-pointer"
-              variant={section === key ? "default" : "ghost"}
+              className="w-full flex items-center justify-center space-x-2 py-8 px-6 rounded-full cursor-pointer no-ripple"
+              variant={
+                section === key ||
+                index <= Object.keys(sections).indexOf(section)
+                  ? "default"
+                  : "ghost"
+              }
               onClick={() => handleButtonClick(key as Section)}
             >
               <span
                 className={cn(
-                  "w-6 h-6 rounded-full flex items-center justify-center text-background text-xs font-bold",
-                  section === key ? "bg-muted text-primary" : "bg-secondary"
+                  "w-6 h-6 rounded-full flex items-center justify-center text-hotel-beige text-xs font-bold",
+                  section === key ||
+                    index <= Object.keys(sections).indexOf(section)
+                    ? "bg-foreground text-primary"
+                    : "bg-muted text-hotel-darkBeige"
                 )}
               >
                 {index + 1}
               </span>
-              <span className={cn("", section === key ? "font-bold" : "")}>
+              <span
+                className={cn(
+                  "",
+                  section === key ||
+                    index <= Object.keys(sections).indexOf(section)
+                    ? "text-foreground"
+                    : "text-muted"
+                )}
+              >
                 {title}
               </span>
             </Button>
