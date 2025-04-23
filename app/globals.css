@@ -108,6 +108,16 @@
 }
 
 @layer utilities {
+  .no-ripple {
+    position: relative !important;
+    overflow: unset !important;
+    z-index: 0 !important;
+  }
+
+  .no-ripple::before {
+    display: none !important;
+  }
+
   .button-ripple {
     position: relative;
     overflow: hidden;
@@ -170,7 +180,26 @@
     background-color: hsl(var(--hotel-gray));
   }
 
-  .no-ripple::before {
-    display: none;
+  .hiddenScroll::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+
+  .hiddenScroll::-webkit-scrollbar {
+    width: 8px;
+    height: 0px;
+  }
+
+  .hiddenScroll::-webkit-scrollbar-thumb {
+    background-color: #83838357;
+    border-radius: 4px;
+  }
+
+  .transparentScroll::-webkit-scrollbar-track {
+    background-color: transparent !important;
+  }
+
+  .transparentScroll::-webkit-scrollbar-thumb {
+    background-color: transparent !important;
+    height: 0 !important;
   }
 }

@@ -154,7 +154,7 @@ export default function QuienesSomos() {
             >
               <span
                 className={cn(
-                  "w-6 h-6 rounded-full flex items-center justify-center text-hotel-beige text-xs font-bold",
+                  "min-w-6 min-h-6 rounded-full flex items-center justify-center text-hotel-beige text-xs font-bold",
                   section === key ||
                     index <= Object.keys(sections).indexOf(section)
                     ? "bg-foreground text-primary"
