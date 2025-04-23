@@ -1,11 +1,12 @@
 import Image from "next/image";
+import { Button } from "./ui/button";
 
 export default function AboutUs() {
   return (
     <section className="py-24 bg-hotel-lightBeige -mt-8">
       <div className="max-w-screen-lg mx-auto px-4">
         <div className="relative flex flex-col md:flex-row gap-8">
-          <div className="w-full md:w-1/2 relative">
+          <div className="w-full md:w-1/2 relative hidden md:block">
             <div className="relative h-full mb-4">
               <Image
                 src="/home/welcome1.svg"
@@ -31,7 +32,7 @@ export default function AboutUs() {
                 width={36}
                 height={36}
               ></Image>
-              <span className="text-[#d69c4f] uppercase text-sm">Nosotros</span>
+              <span className="text-hotel-gold uppercase text-sm">Nosotros</span>
             </div>
             <h2 className="text-4xl font-playfair mb-6 ml-[10%]">
               Bienvenido a<br />
@@ -51,9 +52,9 @@ export default function AboutUs() {
                 garantizando comodidad y excelencia en cada detalle.
               </p>
             </div>
-            <button className="bg-[#d69c4f] text-white py-2 px-6 rounded-md text-sm">
+            <Button className="bg-hotel-gold text-white py-2 px-6 rounded-md text-sm" ripple="dark">
               Saber más
-            </button>
+            </Button>
           </div>
         </div>
       </div>

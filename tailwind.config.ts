@@ -22,6 +22,7 @@ const config = {
       fontFamily: {
         poppins: ["var(--font-poppins)"],
         playfair: ["var(--font-playfair)"],
+        canada: ["var(--font-canada)"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -30,11 +31,11 @@ const config = {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "#d69c4f",
+          DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
-          DEFAULT: "#f0e9df",
+          DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
         },
         destructive: {

@@ -1,145 +1,82 @@
+import { Facebook, Instagram, Youtube } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
 export default function Footer() {
+  const currentYear = new Date().getFullYear();
+
+  const linksColumn1 = [
+    { label: "Inicio", link: "/" },
+    { label: "Nosotros", link: "/nosotros" },
+    { label: "Habitaciones", link: "/habitaciones" },
+    { label: "Restaurante", link: "/restaurante" },
+  ];
+  const linksColumn2 = [
+    { label: "Evento", link: "/eventos" },
+    { label: "Reservas", link: "/reservas" },
+    { label: "Galería", link: "/galeria" },
+    { label: "Contacto", link: "/contacto" },
+  ];
+  const linksColumn3 = [
+    { label: "Términos y Condiciones", link: "/terminos" },
+    { label: "Política web de privacidad", link: "/privacidad" },
+  ];
+
+  const socialLinks = [
+    { href: "#", icon: <Facebook className="w-5 h-5 fill-current" /> },
+    { href: "#", icon: <Instagram className="w-5 h-5" /> },
+    { href: "#", icon: <Youtube className="w-5 h-5" /> },
+  ];
+
   return (
     <footer>
-      <div className="bg-hotel-lightBeige py-8">
-        <div className="max-w-screen-lg mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
-          <div>
-            <p className="text-sm">
-              Ubicanos en:{" "}
-              <Link
-                href="https://maps.app.goo.gl/fVx8asbgJ7MMudZY7"
-                target="_blank"
-                className="underline"
-              >
-                Av. Túpac Amaru 812 - Trujillo
-              </Link>
-            </p>
-          </div>
-          <div className="flex gap-8 items-center">
-            <p className="font-medium">Medios de pago</p>
-            <div className="flex gap-2 mt-2">
-              <Image src="/icons/visa.png" alt="Visa" width={40} height={30} />
-              <Image
-                src="/icons/master.png"
-                alt="Mastercard"
-                width={40}
-                height={30}
-              />
-              <Image
-                src="/icons/american.png"
-                alt="American Express"
-                width={40}
-                height={30}
-              />
-              <Image
-                src="/icons/diners.png"
-                alt="Diners Club"
-                width={40}
-                height={30}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="bg-[#000000] text-white py-8">
+      <div className="bg-black text-white py-8">
         <div className="max-w-screen-lg mx-auto px-4">
-          <div className="flex flex-col md:flex-row">
-            <div className="w-full md:w-1/4 mb-6 md:mb-0">
-              <Image
-                src="/placeholder.svg?height=80&width=80"
-                alt="Recepciones Trujillo Logo"
-                width={80}
-                height={80}
-                className="mb-4"
-              />
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="w-full flex justify-center md:w-fit">
+              <Link href="/" className="flex items-center">
+                <Image
+                  src="/logo.svg"
+                  alt="Recepciones Trujillo Logo"
+                  width={80}
+                  height={80}
+                  className="mb-4"
+                />
+              </Link>
             </div>
-            <div className="w-full md:w-3/4 grid grid-cols-2 md:grid-cols-4 gap-6">
-              <div>
-                <h3 className="text-sm font-medium mb-4">Inicio</h3>
-              </div>
-              <div>
-                <h3 className="text-sm font-medium mb-4">Eventos</h3>
-                <ul className="text-xs space-y-2 text-gray-400">
-                  <li>Reservas</li>
-                  <li>Galería</li>
-                </ul>
-              </div>
-              <div>
-                <h3 className="text-sm font-medium mb-4">Contacto</h3>
-                <ul className="text-xs space-y-2 text-gray-400">
-                  <li>Términos y condiciones</li>
-                  <li>Política web de privacidad</li>
-                </ul>
-              </div>
-              <div>
-                <div className="flex space-x-4 mb-4">
-                  <a href="#" className="text-[#d69c4f]">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
-                    </svg>
-                  </a>
-                  <a href="#" className="text-[#d69c4f]">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <rect
-                        x="2"
-                        y="2"
-                        width="20"
-                        height="20"
-                        rx="5"
-                        ry="5"
-                      ></rect>
-                      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                    </svg>
-                  </a>
-                  <a href="#" className="text-[#d69c4f]">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
-                      <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
-                    </svg>
-                  </a>
-                </div>
+            <div className="w-full md:w-2/4 grid grid-cols-3 gap-6">
+              {[linksColumn1, linksColumn2, linksColumn3].map(
+                (links, index) => (
+                  <div key={index} className="flex flex-col gap-2">
+                    {links.map((linkObj, idx) => (
+                      <Link href={linkObj.link} key={idx} className="text-sm">
+                        {linkObj.label}
+                      </Link>
+                    ))}
+                  </div>
+                )
+              )}
+            </div>
+            <div>
+              <div className="flex flex-row md:flex-col gap-4 items-center justify-center md:justify-start">
+                {socialLinks.map((social, index) => (
+                  <Link
+                    key={index}
+                    href={social.href}
+                    className="text-[#d69c4f]"
+                  >
+                    {social.icon}
+                  </Link>
+                ))}
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div className="bg-[#000000] text-gray-500 text-xs py-4 border-t border-gray-800">
+      <div className="bg-black text-gray-500 text-xs py-4 border-t border-gray-800">
         <div className="max-w-screen-lg mx-auto px-4 text-center">
-          Recepciones Trujillo ©2023 Todos los derechos reservados.
+          Recepciones Trujillo &copy; {currentYear}. Todos los derechos
+          reservados.
         </div>
       </div>
     </footer>

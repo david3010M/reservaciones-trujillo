@@ -4,6 +4,15 @@
 
 @layer base {
   :root {
+    --hotel-gold: 34 62% 57%;
+    --hotel-beige: 35 80% 90%;
+    --hotel-cream: 35 36% 91%;
+    --hotel-light-beige: 0 0% 95%;
+    --hotel-dark-beige: 34 45% 82%;
+    --hotel-dark: 0 0% 11%;
+    --hotel-gray: 220 3% 41%;
+    --hotel-dark-gray: 0 0% 21%;
+
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
 
@@ -13,20 +22,20 @@
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 3.9%;
 
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
+    --primary: var(--hotel-gold);
+    --primary-foreground: var(--background);
 
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
+    --secondary: var(--hotel-dark);
+    --secondary-foreground: var(--background);
 
-    --muted: 0 0% 96.1%;
+    --muted: var(--hotel-dark-gray);
     --muted-foreground: 0 0% 45.1%;
 
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
+    --accent: var(--hotel-dark);
+    --accent-foreground: var(--background);
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive-foreground: var(--background);
 
     --border: 0 0% 89.8%;
     --input: 0 0% 89.8%;
@@ -46,7 +55,7 @@
     --popover-foreground: 0 0% 98%;
 
     --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
+    --primary-foreground: var(--hotel-gold);
 
     --secondary: 0 0% 14.9%;
     --secondary-foreground: 0 0% 98%;
@@ -94,3 +103,103 @@
   font-family: var(--font-playfair), serif;
 }
 
+.font-canada {
+  font-family: var(--font-canada), serif;
+}
+
+@layer utilities {
+  .no-ripple {
+    position: relative !important;
+    overflow: unset !important;
+    z-index: 0 !important;
+  }
+
+  .no-ripple::before {
+    display: none !important;
+  }
+
+  .button-ripple {
+    position: relative;
+    overflow: hidden;
+    z-index: 0;
+  }
+
+  .button-ripple::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100px;
+    height: 100px;
+    border-radius: 9999px;
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.5s ease-out;
+    pointer-events: none;
+    z-index: -10;
+  }
+
+  .ripple-lg::before {
+    width: 150px !important;
+    height: 150px !important;
+  }
+
+  .button-ripple:hover::before {
+    transform: translate(-50%, -50%) scale(2); /* efecto de crecimiento desde el centro */
+  }
+
+  .button-ripple > * {
+    position: relative;
+    z-index: 10;
+  }
+
+  .ripple-gold::before {
+    background-color: hsl(var(--hotel-gold));
+  }
+
+  .ripple-beige::before {
+    background-color: hsl(var(--hotel-beige));
+  }
+
+  .ripple-cream::before {
+    background-color: hsl(var(--hotel-cream));
+  }
+
+  .ripple-light-beige::before {
+    background-color: hsl(var(--hotel-light-beige));
+  }
+
+  .ripple-dark-beige::before {
+    background-color: hsl(var(--hotel-dark-beige));
+  }
+
+  .ripple-dark::before {
+    background-color: hsl(var(--hotel-dark));
+  }
+
+  .ripple-gray::before {
+    background-color: hsl(var(--hotel-gray));
+  }
+
+  .hiddenScroll::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+
+  .hiddenScroll::-webkit-scrollbar {
+    width: 8px;
+    height: 0px;
+  }
+
+  .hiddenScroll::-webkit-scrollbar-thumb {
+    background-color: #83838357;
+    border-radius: 4px;
+  }
+
+  .transparentScroll::-webkit-scrollbar-track {
+    background-color: transparent !important;
+  }
+
+  .transparentScroll::-webkit-scrollbar-thumb {
+    background-color: transparent !important;
+    height: 0 !important;
+  }
+}
