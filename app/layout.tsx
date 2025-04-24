@@ -1,6 +1,12 @@
 import type React from "react";
 import "./globals.css";
-import { Poppins, Playfair_Display, Radio_Canada } from "next/font/google";
+import {
+  Poppins,
+  Playfair_Display,
+  Radio_Canada,
+  Marcellus,
+  Lato,
+} from "next/font/google";
 
 // Poppins font for body text
 const poppins = Poppins({
@@ -26,6 +32,21 @@ const canada = Radio_Canada({
   variable: "--font-canada",
 });
 
+// Marcellus for special text
+const marcellus = Marcellus({
+  weight: ["400"],
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-marcellus",
+});
+
+const lato = Lato({
+  weight: ["100", "300", "400", "700", "900"],
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-lato",
+});
+
 export const metadata = {
   title: "Recepciones Trujillo",
   description: "Hotel y centro de eventos en Trujillo, Perú",
@@ -40,7 +61,7 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body
-        className={`${poppins.variable} ${playfair.variable}  ${canada.variable} font-poppins`}
+        className={`${poppins.variable} ${playfair.variable} ${canada.variable} ${marcellus.variable} ${lato.variable} font-poppins`}
       >
         <main className="min-h-screen">
           {/* Top Bar */}

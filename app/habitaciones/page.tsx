@@ -3,6 +3,43 @@ import Link from "next/link";
 import { ChevronRight, Wifi, Tv, Coffee, Bath, Users } from "lucide-react";
 import Title from "@/components/title";
 
+const amenitiesIcons = [
+  { Icon: Wifi, label: "Wifi" },
+  { Icon: Tv, label: "Tv" },
+  { Icon: Coffee, label: "Coffee" },
+  { Icon: Bath, label: "Bath" },
+];
+
+const rooms = [
+  {
+    title: "Habitación Simple",
+    description:
+      "Ideal para viajeros individuales que buscan confort y funcionalidad.",
+    capacity: "1 PERSONA",
+    link: "/habitaciones/simple",
+    imageAlt: "Habitación Simple",
+    imageSrc: "/habitaciones/simple.png",
+  },
+  {
+    title: "Habitación Doble",
+    description:
+      "Perfecta para amigos o familiares que desean compartir su estadía sin perder privacidad.",
+    capacity: "4 PERSONAS",
+    link: "/habitaciones/doble",
+    imageAlt: "Habitación Doble",
+    imageSrc: "/habitaciones/doble.png",
+    badge: "ONLY 4 ROOMS LEFT AT THIS PRICE",
+  },
+  {
+    title: "Habitación Matrimonial",
+    description: "Opción ideal para parejas que buscan comodidad y privacidad.",
+    capacity: "2 PERSONAS",
+    link: "/habitaciones/matrimonial",
+    imageAlt: "Habitación Matrimonial",
+    imageSrc: "/habitaciones/matrimonial.png",
+  },
+];
+
 export default function HabitacionesPage() {
   return (
     <main className="min-h-screen">
@@ -16,172 +53,86 @@ export default function HabitacionesPage() {
 
       {/* Rooms Section */}
       <section className="py-16">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-playfair mb-12">
+        <div className="container max-w-screen-lg mx-auto px-4">
+          <h2 className="text-3xl font-poppins font-semibold mb-12">
             Conoce nuestras habitaciones
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Booking Widget */}
-            <div className="bg-[#fae9d1] p-6 rounded-md">
+          <div className="flex gap-8">
+            <div className="bg-hotel-beige p-6 w-1/3 h-fit">
               <div className="grid grid-cols-2 gap-4">
-                <div className="bg-[#d69c4f] p-4 text-white text-center">
-                  <div className="uppercase text-xs mb-1">Ingreso</div>
-                  <div className="text-4xl font-playfair">17</div>
-                  <div className="uppercase text-xs">May</div>
-                  <ChevronRight className="mx-auto mt-1 h-4 w-4" />
-                </div>
-                <div className="bg-[#d69c4f] p-4 text-white text-center">
-                  <div className="uppercase text-xs mb-1">Salida</div>
-                  <div className="text-4xl font-playfair">18</div>
-                  <div className="uppercase text-xs">May</div>
-                  <ChevronRight className="mx-auto mt-1 h-4 w-4" />
-                </div>
-                <div className="bg-[#d69c4f] p-4 text-white text-center">
-                  <div className="uppercase text-xs mb-1">Personas</div>
-                  <div className="text-4xl font-playfair">1</div>
-                  <ChevronRight className="mx-auto mt-1 h-4 w-4" />
-                </div>
-                <div className="bg-[#d69c4f] p-4 text-white text-center">
-                  <div className="uppercase text-xs mb-1">Noches</div>
-                  <div className="text-4xl font-playfair">1</div>
-                </div>
+                {["Ingreso", "Salida", "Personas", "Noches"].map(
+                  (label, idx) => (
+                    <div
+                      key={idx}
+                      className="bg-hotel-gold p-4 text-white text-center"
+                    >
+                      <div className="uppercase text-xs mb-1">{label}</div>
+                      <div className="text-4xl font-playfair">
+                        {idx === 0 ? "17" : idx === 1 ? "18" : "1"}
+                      </div>
+                      {idx < 2 && <div className="uppercase text-xs">May</div>}
+                      {idx < 3 && (
+                        <ChevronRight className="mx-auto mt-1 h-4 w-4" />
+                      )}
+                    </div>
+                  )
+                )}
               </div>
             </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-2/3">
+              {/* Booking Widget */}
 
-            {/* Room 1 - Simple */}
-            <div className="border border-gray-200 rounded-md overflow-hidden bg-white">
-              <div className="relative h-48">
-                <Image
-                  src="/placeholder.svg?height=200&width=350"
-                  alt="Habitación Simple"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-playfair mb-2">
-                  Habitación Simple
-                </h3>
-                <div className="flex items-center mb-4 text-sm text-gray-500">
-                  <Users className="h-4 w-4 mr-1" />
-                  <span>1 PERSONA</span>
-                </div>
-                <p className="text-sm mb-6">
-                  Ideal para viajeros individuales que buscan confort y
-                  funcionalidad.
-                </p>
-                <Link
-                  href="/habitaciones/simple"
-                  className="block w-full border border-[#d69c4f] text-[#d69c4f] py-2 px-4 rounded-md hover:bg-[#d69c4f] hover:text-white transition-colors mb-6 text-center"
+              {/* Rooms */}
+              {rooms.map((room, idx) => (
+                <div
+                  key={idx}
+                  className="border-2 border-hotel-beige overflow-hidden bg-white"
                 >
-                  RESERVAR AHORA
-                </Link>
-                <div className="flex justify-between border-t pt-4">
-                  <div className="flex space-x-4">
-                    <Wifi className="h-5 w-5 text-gray-400" />
-                    <Tv className="h-5 w-5 text-gray-400" />
-                    <Coffee className="h-5 w-5 text-gray-400" />
-                    <Bath className="h-5 w-5 text-gray-400" />
+                  <div className="relative h-48">
+                    <Image
+                      src={room.imageSrc}
+                      alt={room.imageAlt}
+                      fill
+                      className="object-cover"
+                    />
+                    {room.badge && (
+                      <div className="absolute top-2 right-2 bg-white text-xs py-1 px-2 rounded">
+                        {room.badge}
+                      </div>
+                    )}
                   </div>
-                  <Link
-                    href="/habitaciones/simple"
-                    className="text-xs text-[#d69c4f] flex items-center"
-                  >
-                    VER MÁS <ChevronRight className="h-3 w-3 ml-1" />
-                  </Link>
-                </div>
-              </div>
-            </div>
-
-            {/* Room 2 - Doble */}
-            <div className="border border-gray-200 rounded-md overflow-hidden bg-white">
-              <div className="relative h-48">
-                <Image
-                  src="/placeholder.svg?height=200&width=350"
-                  alt="Habitación Doble"
-                  fill
-                  className="object-cover"
-                />
-                <div className="absolute top-2 right-2 bg-white text-xs py-1 px-2 rounded">
-                  ONLY 4 ROOMS LEFT AT THIS PRICE
-                </div>
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-playfair mb-2">Habitación Doble</h3>
-                <div className="flex items-center mb-4 text-sm text-gray-500">
-                  <Users className="h-4 w-4 mr-1" />
-                  <span>4 PERSONAS</span>
-                </div>
-                <p className="text-sm mb-6">
-                  Perfecta para amigos o familiares que desean compartir su
-                  estadía sin perder privacidad.
-                </p>
-                <Link
-                  href="/habitaciones/doble"
-                  className="block w-full border border-[#d69c4f] text-[#d69c4f] py-2 px-4 rounded-md hover:bg-[#d69c4f] hover:text-white transition-colors mb-6 text-center"
-                >
-                  RESERVAR AHORA
-                </Link>
-                <div className="flex justify-between border-t pt-4">
-                  <div className="flex space-x-4">
-                    <Wifi className="h-5 w-5 text-gray-400" />
-                    <Tv className="h-5 w-5 text-gray-400" />
-                    <Coffee className="h-5 w-5 text-gray-400" />
-                    <Bath className="h-5 w-5 text-gray-400" />
+                  <div className="p-6">
+                    <h3 className="text-xl font-lato tracking-wider text-hotel-darkGray mb-2">
+                      {room.title}
+                    </h3>
+                    <div className="flex items-center mb-4 text-sm text-gray-500">
+                      <Users className="h-4 w-4 mr-1" />
+                      <span>{room.capacity}</span>
+                    </div>
+                    <p className="text-sm mb-6">{room.description}</p>
+                    <Link
+                      href={room.link}
+                      className="block w-full border border-hotel-gold text-hotel-gold py-2 px-4 rounded-md hover:bg-hotel-gold hover:text-white transition-colors mb-6 text-center"
+                    >
+                      RESERVAR AHORA
+                    </Link>
+                    <div className="flex justify-between border-t pt-4">
+                      <div className="flex space-x-4">
+                        {amenitiesIcons.map(({ Icon }, idx) => (
+                          <Icon key={idx} className="h-5 w-5 text-gray-400" />
+                        ))}
+                      </div>
+                      <Link
+                        href={room.link}
+                        className="text-xs text-hotel-gold flex items-center"
+                      >
+                        VER MÁS <ChevronRight className="h-3 w-3 ml-1" />
+                      </Link>
+                    </div>
                   </div>
-                  <Link
-                    href="/habitaciones/doble"
-                    className="text-xs text-[#d69c4f] flex items-center"
-                  >
-                    VER MÁS <ChevronRight className="h-3 w-3 ml-1" />
-                  </Link>
                 </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Room 3 - Matrimonial */}
-          <div className="mt-8 max-w-md mx-auto md:mx-0 md:ml-auto border border-gray-200 rounded-md overflow-hidden bg-white">
-            <div className="relative h-48">
-              <Image
-                src="/placeholder.svg?height=200&width=350"
-                alt="Habitación Matrimonial"
-                fill
-                className="object-cover"
-              />
-            </div>
-            <div className="p-6">
-              <h3 className="text-xl font-playfair mb-2">
-                Habitación Matrimonial
-              </h3>
-              <div className="flex items-center mb-4 text-sm text-gray-500">
-                <Users className="h-4 w-4 mr-1" />
-                <span>2 PERSONAS</span>
-              </div>
-              <p className="text-sm mb-6">
-                Opción ideal para parejas que buscan comodidad y privacidad.
-              </p>
-              <Link
-                href="/habitaciones/matrimonial"
-                className="block w-full border border-[#d69c4f] text-[#d69c4f] py-2 px-4 rounded-md hover:bg-[#d69c4f] hover:text-white transition-colors mb-6 text-center"
-              >
-                RESERVAR AHORA
-              </Link>
-              <div className="flex justify-between border-t pt-4">
-                <div className="flex space-x-4">
-                  <Wifi className="h-5 w-5 text-gray-400" />
-                  <Tv className="h-5 w-5 text-gray-400" />
-                  <Coffee className="h-5 w-5 text-gray-400" />
-                  <Bath className="h-5 w-5 text-gray-400" />
-                </div>
-                <Link
-                  href="/habitaciones/matrimonial"
-                  className="text-xs text-[#d69c4f] flex items-center"
-                >
-                  VER MÁS <ChevronRight className="h-3 w-3 ml-1" />
-                </Link>
-              </div>
+              ))}
             </div>
           </div>
         </div>
