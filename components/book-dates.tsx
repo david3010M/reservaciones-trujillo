@@ -1,5 +1,5 @@
 "use client";
-import { CalendarIcon, ChevronRight, MapPin } from "lucide-react";
+import { CalendarIcon, MapPin } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
@@ -63,11 +63,11 @@ export default function BookDates() {
                 {fromDate ? (
                   <div className="flex gap-2">
                     <span className="ml-2 text-3xl font-semibold">
-                      {format(fromDate, "dd")}
+                      {format(fromDate, "dd", { locale: es })}
                     </span>
                     <div className="flex flex-col ml-2">
                       <span className="text-sm font-semibold uppercase">
-                        {format(fromDate, "MMM yy")}
+                        {format(fromDate, "MMM yy", { locale: es })}
                       </span>
                       <span className="text-xs text-gray-500 uppercase">
                         {format(fromDate, "EEEE", { locale: es })}
@@ -103,11 +103,11 @@ export default function BookDates() {
                 {toDate ? (
                   <div className="flex gap-2">
                     <span className="ml-2 text-3xl font-semibold">
-                      {format(toDate, "dd")}
+                      {format(toDate, "dd", { locale: es })}
                     </span>
                     <div className="flex flex-col ml-2">
                       <span className="text-sm font-semibold uppercase">
-                        {format(toDate, "MMM yy")}
+                        {format(toDate, "MMM yy", { locale: es })}
                       </span>
                       <span className="text-xs text-gray-500 uppercase">
                         {format(toDate, "EEEE", { locale: es })}

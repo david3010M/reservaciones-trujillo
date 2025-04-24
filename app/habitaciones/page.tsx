@@ -1,7 +1,29 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronRight, Wifi, Tv, Coffee, Bath, Users } from "lucide-react";
+import {
+  ChevronRight,
+  Wifi,
+  Tv,
+  Coffee,
+  Bath,
+  Users,
+  CalendarIcon,
+  ChevronDown,
+  ChevronUp,
+} from "lucide-react";
 import Title from "@/components/title";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { useState } from "react";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
+import { Button } from "@/components/ui/button";
 
 const amenitiesIcons = [
   { Icon: Wifi, label: "Wifi" },
@@ -41,6 +63,12 @@ const rooms = [
 ];
 
 export default function HabitacionesPage() {
+  const [fromDate, setOriginDate] = useState<Date | undefined>(new Date());
+  const [toDate, setToDate] = useState<Date | undefined>(
+    new Date(new Date().setDate(new Date().getDate() + 1))
+  );
+  const [peopleCount, setPeopleCount] = useState(1);
+
   return (
     <main className="min-h-screen">
       {/* Habitaciones Header */}
@@ -52,35 +80,120 @@ export default function HabitacionesPage() {
       />
 
       {/* Rooms Section */}
-      <section className="py-16">
+      <section className="py-8 md:py-16">
         <div className="container max-w-screen-lg mx-auto px-4">
-          <h2 className="text-3xl font-poppins font-semibold mb-12">
+          <h2 className="text-xl md:text-3xl font-poppins font-semibold mb-8 md:mb-12">
             Conoce nuestras habitaciones
           </h2>
 
-          <div className="flex gap-8">
-            <div className="bg-hotel-beige p-6 w-1/3 h-fit">
-              <div className="grid grid-cols-2 gap-4">
-                {["Ingreso", "Salida", "Personas", "Noches"].map(
-                  (label, idx) => (
-                    <div
-                      key={idx}
-                      className="bg-hotel-gold p-4 text-white text-center"
-                    >
-                      <div className="uppercase text-xs mb-1">{label}</div>
-                      <div className="text-4xl font-playfair">
-                        {idx === 0 ? "17" : idx === 1 ? "18" : "1"}
-                      </div>
-                      {idx < 2 && <div className="uppercase text-xs">May</div>}
-                      {idx < 3 && (
-                        <ChevronRight className="mx-auto mt-1 h-4 w-4" />
-                      )}
+          <div className="flex flex-col lg:flex-row gap-8">
+            <div className="bg-hotel-beige p-6 lg:w-1/3 h-fit">
+              <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 gap-4 font-lato place-items-center">
+                {["Ingreso", "Salida"].map((label, idx) => (
+                  <Popover key={idx}>
+                    <PopoverTrigger asChild className="w-full aspect-square">
+                      <Button className="w-full h-fit min-w-16 max-w-32 rounded-none p-1 sm:p-4 flex flex-col items-center gap-0.5 sm:gap-4 aspect-square">
+                        <span className="block text-[9px] sm:text-xs uppercase tracking-widest">
+                          {label}
+                        </span>
+                        {idx === 0 && fromDate ? (
+                          <div className="flex gap-2">
+                            <span className="text-6xl font-thin">
+                              {format(fromDate, "dd", { locale: es })}
+                            </span>
+                            <div className="flex flex-col items-center justify-center">
+                              <span className="text-sm">
+                                {format(fromDate, "MMM", { locale: es })
+                                  .charAt(0)
+                                  .toUpperCase() +
+                                  format(fromDate, "MMM", {
+                                    locale: es,
+                                  }).slice(1)}
+                              </span>
+                              <ChevronDown className="max-h-3 max-w-3" />
+                            </div>
+                          </div>
+                        ) : idx === 1 && toDate ? (
+                          <div className="flex gap-2">
+                            <span className="text-6xl font-thin">
+                              {format(toDate, "dd", { locale: es })}
+                            </span>
+                            <div className="flex flex-col items-center justify-center">
+                              <span className="text-sm">
+                                {format(toDate, "MMM", { locale: es })
+                                  .charAt(0)
+                                  .toUpperCase() +
+                                  format(toDate, "MMM", {
+                                    locale: es,
+                                  }).slice(1)}
+                              </span>
+                              <ChevronDown className="max-h-3 max-w-3" />
+                            </div>
+                          </div>
+                        ) : (
+                          <span className="text-sm">Selecciona una fecha</span>
+                        )}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                      fromDate={idx === 0 ? new Date() : fromDate}
+                      mode="single"
+                      selected={idx === 0 ? fromDate : toDate}
+                      onSelect={idx === 0 ? setOriginDate : setToDate}
+                      initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                ))}
+
+                <div className="bg-primary text-primary-foreground w-full h-fit min-w-16 min-h-16 max-w-32 max-h-32 rounded-none p-1 sm:p-4 flex flex-col items-center justify-center gap-0.5 sm:gap-4 aspect-square">
+                  <span className="block text-[9px] sm:text-xs uppercase tracking-widest">
+                    Personas
+                  </span>
+                  <div className="flex gap-2">
+                    <span className="text-6xl font-thin">{peopleCount}</span>
+                    <div className="flex flex-col gap-2 items-center justify-center">
+                      <Button
+                        size="icon"
+                        onClick={() =>
+                          setPeopleCount((prev) => Math.min(prev + 1, 10))
+                        }
+                        className="p-2 max-h-6 max-w-6"
+                      >
+                        <ChevronUp className="max-h-4 max-w-4" />
+                      </Button>
+                      <Button
+                        size="icon"
+                        onClick={() =>
+                          setPeopleCount((prev) => Math.max(prev - 1, 1))
+                        }
+                        className="p-2 max-h-6 max-w-6"
+                      >
+                        <ChevronDown className="max-h-4 max-w-4" />
+                      </Button>
                     </div>
-                  )
-                )}
+                  </div>
+                </div>
+                <div className="bg-primary text-primary-foreground w-full h-fit min-w-16 min-h-16 max-w-32 max-h-32 rounded-none p-1 sm:p-4 flex flex-col items-center justify-center gap-0.5 sm:gap-4 aspect-square">
+                  <span className="block text-[9px] sm:text-xs uppercase tracking-widest">
+                    Noches
+                  </span>
+                  <span className="text-6xl font-thin">
+                    {fromDate && toDate
+                      ? Math.max(
+                          1,
+                          Math.ceil(
+                            (toDate.getTime() - fromDate.getTime()) /
+                              (1000 * 60 * 60 * 24)
+                          )
+                        )
+                      : 0}
+                  </span>
+                </div>
               </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-2/3">
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-2 gap-8 lg:w-2/3">
               {/* Booking Widget */}
 
               {/* Rooms */}

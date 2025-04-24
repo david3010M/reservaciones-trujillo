@@ -44,9 +44,9 @@ export default function Header() {
       </div>
 
       {/* Navigation */}
-      <nav className="bg-black text-white py-2 px-6 font-marcellus">
+      <nav className="bg-black text-white py-2 px-6 font-marcellus flex justify-between sm:block">
         {/* Desktop Menu */}
-        <div className="flex items-center justify-between max-w-screen-xl mx-auto">
+        <div className="flex items-center justify-between max-w-screen-xl sm:mx-auto">
           <div className="hidden md:flex space-x-8 text-sm">
             {menuItemsLeft.map((item) => (
               <Link
