@@ -67,6 +67,18 @@ export default function HabitacionesPage() {
   const { dateFrom, dateTo, setDateFrom, setDateTo } = useReservaStore();
   const [peopleCount, setPeopleCount] = useState(1);
 
+  useEffect(() => {
+    const storedDateFrom = localStorage.getItem("dateFrom");
+    const storedDateTo = localStorage.getItem("dateTo");
+
+    if (storedDateFrom) {
+      setDateFrom(parse(storedDateFrom, "yyyy-MM-dd", new Date()));
+    }
+    if (storedDateTo) {
+      setDateTo(parse(storedDateTo, "yyyy-MM-dd", new Date()));
+    }
+  }, [setDateFrom, setDateTo]);
+
   return (
     <main className="min-h-screen">
       {/* Habitaciones Header */}
@@ -135,11 +147,15 @@ export default function HabitacionesPage() {
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
-                        fromDate={idx === 0 ? new Date() : dateFrom}
-                        mode="single"
-                        selected={idx === 0 ? dateFrom : dateTo}
-                        onSelect={idx === 0 ? setDateFrom : setDateTo}
+                        fromDate={new Date()}
+                        mode="range"
+                        selected={{ from: dateFrom, to: dateTo }}
+                        onSelect={(range) => {
+                          if (range?.from) setDateFrom(range.from);
+                          if (range?.to) setDateTo(range.to);
+                        }}
                         initialFocus
+                        numberOfMonths={2}
                       />
                     </PopoverContent>
                   </Popover>

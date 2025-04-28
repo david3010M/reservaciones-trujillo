@@ -18,22 +18,14 @@ import {
 } from "./ui/select";
 import { Input } from "./ui/input";
 import { TipoHabitacionResponse } from "./tipohabitacion/lib/tipohabitacion.interface";
+import useReservaStore from "./reserva/lib/reserva.store";
 
 interface Props {
   tiposHabitacion: TipoHabitacionResponse;
 }
 
 export default function BookDates({ tiposHabitacion }: Props) {
-  const [fromDate, setOriginDate] = useState<Date | undefined>(new Date());
-  const [toDate, setToDate] = useState<Date | undefined>(
-    new Date(new Date().setDate(new Date().getDate() + 1))
-  );
-
-  useEffect(() => {
-    if (fromDate && toDate && fromDate > toDate) {
-      setToDate(fromDate);
-    }
-  }, [fromDate, toDate]);
+  const { dateFrom, dateTo, setDateFrom, setDateTo } = useReservaStore();
 
   return (
     <section className="bg-white py-4 shadow-md relative -mt-12 mx-auto max-w-6xl rounded-md z-10">
@@ -64,21 +56,21 @@ export default function BookDates({ tiposHabitacion }: Props) {
                 variant={"ghost"}
                 className={cn(
                   "md:min-w-[240px] ripple-lg h-fit justify-start text-left font-normal",
-                  !fromDate && "text-muted-foreground"
+                  !dateFrom && "text-muted-foreground"
                 )}
               >
                 <CalendarIcon className="stroke-hotel-gold !size-8" />
-                {fromDate ? (
+                {dateFrom ? (
                   <div className="flex gap-2">
                     <span className="ml-2 text-3xl font-semibold">
-                      {format(fromDate, "dd", { locale: es })}
+                      {format(dateFrom, "dd", { locale: es })}
                     </span>
                     <div className="flex flex-col ml-2">
                       <span className="text-sm font-semibold uppercase">
-                        {format(fromDate, "MMM yy", { locale: es })}
+                        {format(dateFrom, "MMM yy", { locale: es })}
                       </span>
                       <span className="text-xs text-gray-500 uppercase">
-                        {format(fromDate, "EEEE", { locale: es })}
+                        {format(dateFrom, "EEEE", { locale: es })}
                       </span>
                     </div>
                   </div>
@@ -92,10 +84,14 @@ export default function BookDates({ tiposHabitacion }: Props) {
             <PopoverContent className="w-auto p-0" align="start">
               <Calendar
                 fromDate={new Date()}
-                mode="single"
-                selected={fromDate}
-                onSelect={setOriginDate}
+                mode="range"
+                selected={{ from: dateFrom, to: dateTo }}
+                onSelect={(range) => {
+                  if (range?.from) setDateFrom(range.from);
+                  if (range?.to) setDateTo(range.to);
+                }}
                 initialFocus
+                numberOfMonths={2}
               />
             </PopoverContent>
           </Popover>
@@ -105,21 +101,21 @@ export default function BookDates({ tiposHabitacion }: Props) {
                 variant={"ghost"}
                 className={cn(
                   "md:min-w-[240px] ripple-lg h-fit justify-start text-left font-normal",
-                  !toDate && "text-muted-foreground"
+                  !dateTo && "text-muted-foreground"
                 )}
               >
                 <CalendarIcon className="stroke-hotel-gold !size-8" />
-                {toDate ? (
+                {dateTo ? (
                   <div className="flex gap-2">
                     <span className="ml-2 text-3xl font-semibold">
-                      {format(toDate, "dd", { locale: es })}
+                      {format(dateTo, "dd", { locale: es })}
                     </span>
                     <div className="flex flex-col ml-2">
                       <span className="text-sm font-semibold uppercase">
-                        {format(toDate, "MMM yy", { locale: es })}
+                        {format(dateTo, "MMM yy", { locale: es })}
                       </span>
                       <span className="text-xs text-gray-500 uppercase">
-                        {format(toDate, "EEEE", { locale: es })}
+                        {format(dateTo, "EEEE", { locale: es })}
                       </span>
                     </div>
                   </div>
@@ -132,11 +128,15 @@ export default function BookDates({ tiposHabitacion }: Props) {
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
               <Calendar
-                fromDate={fromDate}
-                mode="single"
-                selected={toDate}
-                onSelect={setToDate}
+                fromDate={new Date()}
+                mode="range"
+                selected={{ from: dateFrom, to: dateTo }}
+                onSelect={(range) => {
+                  if (range?.from) setDateFrom(range.from);
+                  if (range?.to) setDateTo(range.to);
+                }}
                 initialFocus
+                numberOfMonths={2}
               />
             </PopoverContent>
           </Popover>
