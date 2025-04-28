@@ -9,7 +9,6 @@ import {
   Coffee,
   Bath,
   Users,
-  CalendarIcon,
   ChevronDown,
   ChevronUp,
 } from "lucide-react";
@@ -20,10 +19,12 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
-import { useState } from "react";
-import { format } from "date-fns";
+import { useEffect, useState } from "react";
+import { format, parse } from "date-fns";
 import { es } from "date-fns/locale";
 import { Button } from "@/components/ui/button";
+import { useSearchParams } from "next/navigation";
+import useReservaStore from "@/components/reserva/lib/reserva.store";
 
 const amenitiesIcons = [
   { Icon: Wifi, label: "Wifi" },
@@ -63,10 +64,7 @@ const rooms = [
 ];
 
 export default function HabitacionesPage() {
-  const [fromDate, setOriginDate] = useState<Date | undefined>(new Date());
-  const [toDate, setToDate] = useState<Date | undefined>(
-    new Date(new Date().setDate(new Date().getDate() + 1))
-  );
+  const { dateFrom, dateTo, setDateFrom, setDateTo } = useReservaStore();
   const [peopleCount, setPeopleCount] = useState(1);
 
   return (
@@ -96,34 +94,34 @@ export default function HabitacionesPage() {
                         <span className="block text-[9px] sm:text-xs uppercase tracking-widest">
                           {label}
                         </span>
-                        {idx === 0 && fromDate ? (
+                        {idx === 0 && dateFrom ? (
                           <div className="flex gap-2">
                             <span className="text-6xl font-thin">
-                              {format(fromDate, "dd", { locale: es })}
+                              {format(dateFrom, "dd", { locale: es })}
                             </span>
                             <div className="flex flex-col items-center justify-center">
                               <span className="text-sm">
-                                {format(fromDate, "MMM", { locale: es })
+                                {format(dateFrom, "MMM", { locale: es })
                                   .charAt(0)
                                   .toUpperCase() +
-                                  format(fromDate, "MMM", {
+                                  format(dateFrom, "MMM", {
                                     locale: es,
                                   }).slice(1)}
                               </span>
                               <ChevronDown className="max-h-3 max-w-3" />
                             </div>
                           </div>
-                        ) : idx === 1 && toDate ? (
+                        ) : idx === 1 && dateTo ? (
                           <div className="flex gap-2">
                             <span className="text-6xl font-thin">
-                              {format(toDate, "dd", { locale: es })}
+                              {format(dateTo, "dd", { locale: es })}
                             </span>
                             <div className="flex flex-col items-center justify-center">
                               <span className="text-sm">
-                                {format(toDate, "MMM", { locale: es })
+                                {format(dateTo, "MMM", { locale: es })
                                   .charAt(0)
                                   .toUpperCase() +
-                                  format(toDate, "MMM", {
+                                  format(dateTo, "MMM", {
                                     locale: es,
                                   }).slice(1)}
                               </span>
@@ -137,11 +135,11 @@ export default function HabitacionesPage() {
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
-                      fromDate={idx === 0 ? new Date() : fromDate}
-                      mode="single"
-                      selected={idx === 0 ? fromDate : toDate}
-                      onSelect={idx === 0 ? setOriginDate : setToDate}
-                      initialFocus
+                        fromDate={idx === 0 ? new Date() : dateFrom}
+                        mode="single"
+                        selected={idx === 0 ? dateFrom : dateTo}
+                        onSelect={idx === 0 ? setDateFrom : setDateTo}
+                        initialFocus
                       />
                     </PopoverContent>
                   </Popover>
@@ -180,11 +178,11 @@ export default function HabitacionesPage() {
                     Noches
                   </span>
                   <span className="text-6xl font-thin">
-                    {fromDate && toDate
+                    {dateFrom && dateTo
                       ? Math.max(
                           1,
                           Math.ceil(
-                            (toDate.getTime() - fromDate.getTime()) /
+                            (dateTo.getTime() - dateFrom.getTime()) /
                               (1000 * 60 * 60 * 24)
                           )
                         )

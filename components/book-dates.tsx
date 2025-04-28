@@ -17,8 +17,13 @@ import {
   SelectValue,
 } from "./ui/select";
 import { Input } from "./ui/input";
+import { TipoHabitacionResponse } from "./tipohabitacion/lib/tipohabitacion.interface";
 
-export default function BookDates() {
+interface Props {
+  tiposHabitacion: TipoHabitacionResponse;
+}
+
+export default function BookDates({ tiposHabitacion }: Props) {
   const [fromDate, setOriginDate] = useState<Date | undefined>(new Date());
   const [toDate, setToDate] = useState<Date | undefined>(
     new Date(new Date().setDate(new Date().getDate() + 1))
@@ -42,9 +47,12 @@ export default function BookDates() {
             <SelectContent>
               <SelectGroup>
                 <SelectLabel>Tipo de Recepción</SelectLabel>
-                <SelectItem value="tipo1">Tipo 1</SelectItem>
-                <SelectItem value="tipo2">Tipo 2</SelectItem>
-                <SelectItem value="tipo3">Tipo 3</SelectItem>
+                {tiposHabitacion.data.length > 0 &&
+                  tiposHabitacion.data.map((tipo) => (
+                    <SelectItem key={tipo.id} value={tipo.nombre}>
+                      {tipo.nombre}
+                    </SelectItem>
+                  ))}
               </SelectGroup>
             </SelectContent>
           </Select>
@@ -83,6 +91,7 @@ export default function BookDates() {
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
               <Calendar
+                fromDate={new Date()}
                 mode="single"
                 selected={fromDate}
                 onSelect={setOriginDate}
@@ -123,6 +132,7 @@ export default function BookDates() {
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
               <Calendar
+                fromDate={fromDate}
                 mode="single"
                 selected={toDate}
                 onSelect={setToDate}

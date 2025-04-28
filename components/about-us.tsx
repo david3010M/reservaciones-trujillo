@@ -1,5 +1,16 @@
 import Image from "next/image";
 import { Button } from "./ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export default function AboutUs() {
   return (
@@ -32,7 +43,9 @@ export default function AboutUs() {
                 width={36}
                 height={36}
               ></Image>
-              <span className="text-hotel-gold uppercase text-sm">Nosotros</span>
+              <span className="text-hotel-gold uppercase text-sm">
+                Nosotros
+              </span>
             </div>
             <h2 className="text-4xl font-playfair mb-6 ml-[10%]">
               Bienvenido a<br />
@@ -52,7 +65,10 @@ export default function AboutUs() {
                 garantizando comodidad y excelencia en cada detalle.
               </p>
             </div>
-            <Button className="bg-hotel-gold text-white py-2 px-6 rounded-md text-sm" ripple="dark">
+            <Button
+              className="bg-hotel-gold text-white py-2 px-6 rounded-md text-sm"
+              ripple="dark"
+            >
               Saber más
             </Button>
           </div>
