@@ -1,9 +1,14 @@
 export interface TipoHabitacionResponse {
   success: boolean;
-  data: Datum[];
+  data: TipoHabitacionShowData[];
 }
 
-export interface Datum {
+export interface TipoHabitacionShowResponse {
+  success: boolean;
+  data: TipoHabitacionShowData;
+}
+
+export interface TipoHabitacionShowData {
   id: number;
   nombre: string;
   precio: string;

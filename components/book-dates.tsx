@@ -19,6 +19,8 @@ import {
 import { Input } from "./ui/input";
 import { TipoHabitacionResponse } from "./tipohabitacion/lib/tipohabitacion.interface";
 import useReservaStore from "./reserva/lib/reserva.store";
+import { useRouter } from "next/navigation";
+import { NavigateOptions } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 interface Props {
   tiposHabitacion: TipoHabitacionResponse;
@@ -26,6 +28,11 @@ interface Props {
 
 export default function BookDates({ tiposHabitacion }: Props) {
   const { dateFrom, dateTo, setDateFrom, setDateTo } = useReservaStore();
+  const { push } = useRouter();
+
+  const searchHabitacion = () => {
+    push("/habitaciones");
+  };
 
   return (
     <section className="bg-white py-4 shadow-md relative -mt-12 mx-auto max-w-6xl rounded-md z-10">
@@ -149,7 +156,7 @@ export default function BookDates({ tiposHabitacion }: Props) {
           />
           <Button
             className="bg-hotel-gold text-white py-2 px-6 rounded-md"
-            ripple="dark"
+            onClick={searchHabitacion}
           >
             Buscar
           </Button>

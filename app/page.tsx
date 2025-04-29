@@ -24,7 +24,7 @@ export default async function Home() {
       <Experience />
 
       {/* Rooms Section */}
-      <Rooms />
+      <Rooms tiposHabitacion={tiposHabitacion} />
 
       {/* Contact Section */}
       <Contact />
