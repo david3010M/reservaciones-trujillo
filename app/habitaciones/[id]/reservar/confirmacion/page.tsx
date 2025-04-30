@@ -1,5 +1,3 @@
-"use client";
-
 import { getTipoHabitacion } from "@/components/tipohabitacion/lib/tipohabitacion.actions";
 import { TipoHabitacionShowResponse } from "@/components/tipohabitacion/lib/tipohabitacion.interface";
 import Image from "next/image";
@@ -45,53 +43,53 @@ export default async function ConfirmacionPage({ params }: PageProps) {
 
   return (
     <main className="min-h-screen">
-
       {/* Confirmation Content */}
       <section className="py-12 bg-white">
-        <div className="container mx-auto px-4 max-w-4xl">
+        <div className="container mx-auto px-4 max-w-screen-lg">
           <div className="flex flex-col md:flex-row items-baseline gap-2 mb-2">
-            <h1 className="text-2xl md:text-3xl font-playfair">
+            <h1 className="text-xl md:text-2xl font-poppins font-bold">
               El estado de tu reserva
             </h1>
-            <h2 className="text-2xl md:text-3xl font-playfair text-[#d69c4f]">
+            <h2 className="text-3xl md:text-4xl font-poppins font-bold text-[#d69c4f]">
               Confirmada
             </h2>
           </div>
 
           <p className="text-gray-600 mb-8">
-            Comuníquese con EasySet24 si necesita cambiar la información básica
-            con el número de reserva {reservationNumber}.
+            Comuníquese con el administrador si necesita cambiar la información
+            básica con el número de reserva {reservationNumber}.
           </p>
 
-          <div className="border border-gray-200 rounded-md overflow-hidden mb-8">
+          <div className="border border-gray-200 rounded-md overflow-hidden mb-8 pb-8">
             {/* Banner */}
-            <div className="relative h-48 bg-black">
-              <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
-                <h3 className="text-3xl md:text-4xl font-playfair tracking-wider mb-4">
-                  RECEPCIONES TRUJILLO
-                </h3>
-                <p className="text-sm md:text-base tracking-widest">
-                  HABITACIONES Y EVENTOS INOLVIDABLES
-                </p>
+            <div className="flex flex-col">
+              <div className="flex w-full justify-center bg-black">
+                <Image
+                  src="/reserva/confirmacion.png"
+                  alt="Banner"
+                  width={500}
+                  height={400}
+                  className="object-cover !mb-0"
+                />
               </div>
-            </div>
 
-            {/* Reservation Info */}
-            <div className="bg-gray-100 p-4">
-              <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-2">
-                <h3 className="text-lg font-playfair mb-2 md:mb-0">
-                  Recepciones Trujillo - {room.nombre}
-                </h3>
-                <div className="flex flex-col md:flex-row gap-4">
-                  <div className="flex items-center">
-                    <span className="text-sm">
-                      Ingreso: 11:00am - {formatDate(checkIn)}
-                    </span>
-                  </div>
-                  <div className="flex items-center">
-                    <span className="text-sm">
-                      Salida: 18:00pm - {formatDate(checkOut)}
-                    </span>
+              {/* Reservation Info */}
+              <div className="p-4 !text-white bg-black">
+                <div className="flex flex-col justify-between items-center md:items-start mb-2">
+                  <h3 className="text-lg font-poppins font-semibold mb-2 md:mb-0">
+                    Recepciones Trujillo - {room.nombre}
+                  </h3>
+                  <div className="flex flex-col md:flex-row gap-4">
+                    <div className="flex items-center">
+                      <span className="text-sm">
+                        Ingreso: 11:00am - {formatDate(checkIn)}
+                      </span>
+                    </div>
+                    <div className="flex items-center">
+                      <span className="text-sm">
+                        Salida: 18:00pm - {formatDate(checkOut)}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -101,7 +99,7 @@ export default async function ConfirmacionPage({ params }: PageProps) {
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="bg-gray-200">
+                  <tr className="bg-[#A6A6A6] text-white">
                     <th className="py-3 px-4 text-left">Noches</th>
                     <th className="py-3 px-4 text-left">Check-In</th>
                     <th className="py-3 px-4 text-left">Check-out</th>
@@ -150,9 +148,7 @@ export default async function ConfirmacionPage({ params }: PageProps) {
             >
               Volver al inicio
             </Link>
-            <button
-              className="border border-[#d69c4f] text-[#d69c4f] py-3 px-6 rounded-md"
-            >
+            <button className="border border-[#d69c4f] text-[#d69c4f] py-3 px-6 rounded-md">
               Imprimir confirmación
             </button>
           </div>

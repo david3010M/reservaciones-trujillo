@@ -1,16 +1,6 @@
 import Image from "next/image";
 import { Button } from "./ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import Link from "next/link";
 
 export default function AboutUs() {
   return (
@@ -65,12 +55,14 @@ export default function AboutUs() {
                 garantizando comodidad y excelencia en cada detalle.
               </p>
             </div>
-            <Button
-              className="bg-hotel-gold text-white py-2 px-6 rounded-md text-sm"
-              ripple="dark"
-            >
-              Saber más
-            </Button>
+            <Link href="/nosotros">
+              <Button
+                className="bg-hotel-gold text-white py-2 px-6 rounded-md text-sm"
+                ripple="dark"
+              >
+                Saber más
+              </Button>
+            </Link>
           </div>
         </div>
       </div>

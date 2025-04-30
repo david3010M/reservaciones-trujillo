@@ -13,7 +13,9 @@ export default function ReservationForm({ id }: { id: string }) {
                 <User className="h-5 w-5" />
               </div>
               <div>
-                <h3 className="font-medium">Noely Mascol Montestruque</h3>
+                <h3 className="font-semibold font-poppins">
+                  Noely Mascol Montestruque
+                </h3>
                 <p className="text-sm text-gray-500">noely@gmail.com</p>
               </div>
             </div>
@@ -23,8 +25,10 @@ export default function ReservationForm({ id }: { id: string }) {
             </button>
           </div>
 
-          <h3 className="text-lg font-medium mb-2">Ingrese Su Información</h3>
-          <p className="text-sm text-gray-600 mb-4">
+          <h3 className="text-2xl font-poppins font-bold mb-2">
+            Ingrese Su Información
+          </h3>
+          <p className="text-sm mb-4">
             Asegúrese de que la información que ya ha escrito en su perfil sea
             correcta.
           </p>

@@ -9,7 +9,7 @@ interface ReservaState {
   setPeople: (people: number) => void;
   setDateFrom: (date: Date) => void;
   setDateTo: (date: Date) => void;
-  initializeDates: () => void;
+  initializeReserva: () => void;
 }
 
 const today = new Date();
@@ -19,10 +19,7 @@ tomorrow.setDate(today.getDate() + 1);
 const useReservaStore = create<ReservaState>((set) => ({
   dateFrom: today,
   dateTo: tomorrow,
-  people:
-    typeof window !== "undefined" && localStorage.getItem("people")
-      ? Number(localStorage.getItem("people"))
-      : 1,
+  people: 1, // inicial fijo
   nights: Math.max(
     Math.ceil((tomorrow.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)),
     1
@@ -30,10 +27,8 @@ const useReservaStore = create<ReservaState>((set) => ({
   setPeople: (people: number) => {
     if (typeof window !== "undefined") {
       localStorage.setItem("people", people.toString());
-      set({ people: Number(localStorage.getItem("people")) || 1 });
-    } else {
-      set({ people });
     }
+    set({ people });
   },
   setDateFrom: (date: Date) => {
     if (typeof window !== "undefined") {
@@ -47,16 +42,22 @@ const useReservaStore = create<ReservaState>((set) => ({
     }
     set({ dateTo: date });
   },
-  initializeDates: () => {
-    if (typeof window !== "undefined") {
-      const storedDateFrom = localStorage.getItem("dateFrom");
-      const storedDateTo = localStorage.getItem("dateTo");
+  initializeReserva: () => {
+    if (typeof window === "undefined") return;
 
-      set({
-        dateFrom: storedDateFrom ? new Date(storedDateFrom) : today,
-        dateTo: storedDateTo ? new Date(storedDateTo) : tomorrow,
-      });
-    }
+    const storedPeople = localStorage.getItem("people");
+    const storedDateFrom = localStorage.getItem("dateFrom");
+    const storedDateTo = localStorage.getItem("dateTo");
+
+    const dateFrom = storedDateFrom ? new Date(storedDateFrom) : today;
+    const dateTo = storedDateTo ? new Date(storedDateTo) : tomorrow;
+    const people = storedPeople ? Number(storedPeople) : 1;
+
+    set({
+      people,
+      dateFrom,
+      dateTo,
+    });
   },
 }));
 

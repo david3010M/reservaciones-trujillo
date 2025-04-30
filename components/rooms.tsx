@@ -33,7 +33,7 @@ export default function Rooms({ tiposHabitacion }: Props) {
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {tiposHabitacion.data.length > 0 &&
+          {tiposHabitacion.data.length > 0 ? (
             tiposHabitacion.data.map((tipo) => (
               <RenderRoomCard
                 key={tipo.id}
@@ -41,7 +41,14 @@ export default function Rooms({ tiposHabitacion }: Props) {
                 description={tipo.descripcion.join(", ")}
                 imageSrc={tipo.imagenes[0]?.url ?? "/placeholder.svg"}
               />
-            ))}
+            ))
+          ) : (
+            <>
+              {Array.from({ length: 3 }).map((_, idx: number) => (
+                <RoomCardSkeleton key={idx} />
+              ))}
+            </>
+          )}
         </div>
       </div>
     </section>
@@ -66,6 +73,20 @@ function RenderRoomCard({
             <h3 className="text-xl font-playfair mb-1">{title}</h3>
             <p className="text-xs">{description}</p>
           </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function RoomCardSkeleton() {
+  return (
+    <div className="rounded-md relative overflow-hidden border border-gray-200 animate-pulse">
+      <div className="relative h-80 bg-hotel-beige"></div>
+      <div className="p-2 absolute bottom-0 w-full">
+        <div className="p-2 bg-white/70 rounded-lg w-full">
+          <h3 className="text-xl font-playfair mb-1 bg-hotel-beige h-4 w-1/2"></h3>
+          <p className="text-xs bg-hotel-beige h-4 w-full"></p>
         </div>
       </div>
     </div>

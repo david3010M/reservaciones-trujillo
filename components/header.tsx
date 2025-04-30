@@ -4,6 +4,7 @@ import { Phone, MapPin, Menu } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { Button } from "./ui/button";
 
 const menuItemsLeft = [
   { href: "/", label: "Inicio" },
@@ -13,7 +14,7 @@ const menuItemsLeft = [
 ];
 
 const menuItemsRight = [
-  { href: "/salones", label: "Salones" },
+  { href: "/eventos", label: "Salones" },
   { href: "/reservas", label: "Reservas" },
   { href: "/galeria", label: "Galería" },
   { href: "/contacto", label: "Contacto" },
@@ -39,6 +40,23 @@ export default function Header() {
           <div>
             <Phone className="inline mr-1 size-2 sm:size-4" />
             +51 999999999
+          </div>
+          <div className="hidden md:flex items-center gap-2">
+            <Button
+              variant="link"
+              size="sm"
+              className="text-white text-[8px] md:text-xs h-fit"
+            >
+              Inicia Sesión
+            </Button>
+            |
+            <Button
+              variant="link"
+              size="sm"
+              className="text-white text-[8px] md:text-xs h-fit"
+            >
+              Regístrate
+            </Button>
           </div>
         </div>
       </div>

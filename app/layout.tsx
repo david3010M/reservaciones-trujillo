@@ -8,6 +8,13 @@ import {
   Lato,
 } from "next/font/google";
 
+
+import "./globals.css";
+import Header from "@/components/header";
+import Footer from "@/components/footer";
+import ReservaInitializer from "@/components/ReservaInitializer";
+
+
 // Poppins font for body text
 const poppins = Poppins({
   weight: ["300", "400", "500", "600", "700"],
@@ -70,12 +77,9 @@ export default function RootLayout({
           {children}
           {/* Footer */}
           <Footer />
+          <ReservaInitializer />
         </main>
       </body>
     </html>
   );
 }
-
-import "./globals.css";
-import Header from "@/components/header";
-import Footer from "@/components/footer";

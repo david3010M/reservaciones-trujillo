@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Button } from "./ui/button";
 
 export default function Experience() {
@@ -11,10 +12,14 @@ export default function Experience() {
           Reserva tu estadía o planifica tu evento perfecto con solo un click.
         </p>
         <div className="flex justify-center gap-4">
-          <Button variant="secondary" ripple="gold">
-            Reservar habitación
-          </Button>
-          <Button ripple="gold">Cotizar evento</Button>
+          <Link href="/habitaciones">
+            <Button variant="secondary" ripple="gold">
+              Reservar habitación
+            </Button>
+          </Link>
+          <Link href="/eventos">
+            <Button ripple="gold">Cotizar evento</Button>
+          </Link>
         </div>
       </div>
     </section>
