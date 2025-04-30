@@ -1,6 +1,11 @@
 import Image from "next/image";
+import { TipoHabitacionResponse } from "./tipohabitacion/lib/tipohabitacion.interface";
 
-export default function Rooms() {
+interface Props {
+  tiposHabitacion: TipoHabitacionResponse;
+}
+
+export default function Rooms({ tiposHabitacion }: Props) {
   return (
     <section className="py-16 bg-hotel-lightBeige">
       <div className="max-w-screen-lg mx-auto px-4">
@@ -28,21 +33,22 @@ export default function Rooms() {
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <RenderRoomCard
-            title="Habitación Simple"
-            description="Ideal para viajeros individuales que buscan confort y funcionalidad"
-            imageSrc="/home/simple.png"
-          />
-          <RenderRoomCard
-            title="Habitación Doble"
-            description="Habitación con dos camas, baño privado, TV, internet y comodidades."
-            imageSrc="/home/doble.jpg"
-          />
-          <RenderRoomCard
-            title="Habitación Matrimonial"
-            description="Habitación con cama matrimonial, TV, internet, confort y comodidades."
-            imageSrc="/home/matrimonial.jpg"
-          />
+          {tiposHabitacion.data.length > 0 ? (
+            tiposHabitacion.data.map((tipo) => (
+              <RenderRoomCard
+                key={tipo.id}
+                title={tipo.nombre}
+                description={tipo.descripcion.join(", ")}
+                imageSrc={tipo.imagenes[0]?.url ?? "/placeholder.svg"}
+              />
+            ))
+          ) : (
+            <>
+              {Array.from({ length: 3 }).map((_, idx: number) => (
+                <RoomCardSkeleton key={idx} />
+              ))}
+            </>
+          )}
         </div>
       </div>
     </section>
@@ -62,9 +68,25 @@ function RenderRoomCard({
     <div className="rounded-md overflow-hidden border border-gray-200">
       <div className="relative h-80">
         <Image src={imageSrc} alt={title} fill className="object-cover" />
-        <div className="m-2 p-2 bg-white/70 absolute bottom-0 rounded-lg">
-          <h3 className="text-xl font-playfair mb-1">{title}</h3>
-          <p className="text-xs">{description}</p>
+        <div className="p-2 absolute bottom-0 w-full">
+          <div className="p-2 bg-white/70 rounded-lg w-full">
+            <h3 className="text-xl font-playfair mb-1">{title}</h3>
+            <p className="text-xs">{description}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function RoomCardSkeleton() {
+  return (
+    <div className="rounded-md relative overflow-hidden border border-gray-200 animate-pulse">
+      <div className="relative h-80 bg-hotel-beige"></div>
+      <div className="p-2 absolute bottom-0 w-full">
+        <div className="p-2 bg-white/70 rounded-lg w-full">
+          <h3 className="text-xl font-playfair mb-1 bg-hotel-beige h-4 w-1/2"></h3>
+          <p className="text-xs bg-hotel-beige h-4 w-full"></p>
         </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import type { Config } from "tailwindcss"
+import type { Config } from "tailwindcss";
 
 const config = {
   darkMode: ["class"],
@@ -23,6 +23,8 @@ const config = {
         poppins: ["var(--font-poppins)"],
         playfair: ["var(--font-playfair)"],
         canada: ["var(--font-canada)"],
+        marcellus: ["var(--font-marcellus)"],
+        lato: ["var(--font-lato)"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -66,6 +68,7 @@ const config = {
           darkBeige: "#e5d3bb",
           dark: "#1b1b1b",
           gray: "#65676b",
+          darkGray: "#525252",
         },
       },
       borderRadius: {
@@ -90,7 +93,6 @@ const config = {
     },
   },
   plugins: [require("tailwindcss-animate")],
-} satisfies Config
+} satisfies Config;
 
-export default config
-
+export default config;

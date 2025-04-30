@@ -11,7 +11,7 @@
     --hotel-dark-beige: 34 45% 82%;
     --hotel-dark: 0 0% 11%;
     --hotel-gray: 220 3% 41%;
-    --hotel-dark-gray: 0 0% 21%;
+    --hotel-dark-gray: 0 0% 32%;
 
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
@@ -31,8 +31,8 @@
     --muted: var(--hotel-dark-gray);
     --muted-foreground: 0 0% 45.1%;
 
-    --accent: var(--hotel-dark);
-    --accent-foreground: var(--background);
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: var(--background);
@@ -105,6 +105,14 @@
 
 .font-canada {
   font-family: var(--font-canada), serif;
+}
+
+.font-marcellus {
+  font-family: var(--font-marcellus), serif;
+}
+
+.font-lato {
+  font-family: var(--font-lato), sans-serif;
 }
 
 @layer utilities {
