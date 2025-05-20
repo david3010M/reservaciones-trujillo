@@ -11,4 +11,4 @@ const api = axios.create({
   //   },
 });
 
-export { SUCURSAL, api };
+export { SUCURSAL, api, BASE_URL };

@@ -2,6 +2,7 @@ import Image from "next/image";
 import { HabitacionDisponibleResponseData } from "../tipohabitacion/lib/habitaciondisponible.interface";
 import { ChevronRight, CircleDot, Users } from "lucide-react";
 import Link from "next/link";
+import { BASE_URL } from "@/lib/config";
 
 export default function HabitacionItem({
   room,
@@ -12,18 +13,17 @@ export default function HabitacionItem({
     <div className="border-2 border-hotel-beige overflow-hidden bg-white">
       <div className="relative h-48">
         <Image
-          src={room.tipohabitacion.imagenes[0]?.url ?? "/placeholder.svg"}
+          src={
+            room.tipohabitacion.imagenes[0]?.url
+              ? BASE_URL + "/" + room.tipohabitacion.imagenes[0]?.url
+              : "/placeholder.svg"
+          }
           alt={
             room.tipohabitacion.imagenes[0]?.tipohabitacion_id.toString() ?? ""
           }
           fill
           className="object-cover"
         />
-        {/* {room.badge && (
-        <div className="absolute top-2 right-2 bg-white text-xs py-1 px-2 rounded">
-          {room.badge}
-        </div>
-      )} */}
       </div>
       <div className="p-6">
         <h3 className="text-xl font-lato tracking-wider text-hotel-darkGray mb-2">

@@ -45,8 +45,8 @@ export default function ReservationDetails({ room }: Props) {
             <span>Seleccionó 1 Habitación Para:</span>
           </li>
           <li className="ml-6 mb-1">{people} Adultos</li>
-          <li className="ml-6 mb-1">0 Niños</li>
-          <li className="ml-6">0 Bebés</li>
+          {/* <li className="ml-6 mb-1">0 Niños</li>
+          <li className="ml-6">0 Bebés</li> */}
         </ul>
       </div>
 
@@ -70,10 +70,10 @@ export default function ReservationDetails({ room }: Props) {
               </span>
             </div>
           </div>
-          <div className="flex justify-between mb-2">
+          {/* <div className="flex justify-between mb-2">
             <span>Descuento</span>
             <span className="text-red-500">S/{0}</span>
-          </div>
+          </div> */}
           <div className="flex justify-between font-medium">
             <span>Importe Total A Pagar</span>
             <span className="text-lime-600 font-bold">S/{room.precio}</span>

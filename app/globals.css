@@ -151,6 +151,11 @@
     height: 150px !important;
   }
 
+  .ripple-xl::before {
+    width: 450px !important;
+    height: 450px !important;
+  }
+
   .button-ripple:hover::before {
     transform: translate(-50%, -50%) scale(2); /* efecto de crecimiento desde el centro */
   }
