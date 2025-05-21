@@ -8,12 +8,11 @@ import {
   Lato,
 } from "next/font/google";
 
-
 import "./globals.css";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import ReservaInitializer from "@/components/ReservaInitializer";
-
+import { Toaster } from "sonner";
 
 // Poppins font for body text
 const poppins = Poppins({
@@ -77,6 +76,7 @@ export default function RootLayout({
           {children}
           {/* Footer */}
           <Footer />
+          <Toaster />
           <ReservaInitializer />
         </main>
       </body>

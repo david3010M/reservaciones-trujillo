@@ -15,7 +15,6 @@ const menuItemsLeft = [
 
 const menuItemsRight = [
   { href: "/eventos", label: "Salones" },
-  { href: "/reservas", label: "Reservas" },
   { href: "/galeria", label: "Galería" },
   { href: "/contacto", label: "Contacto" },
 ];

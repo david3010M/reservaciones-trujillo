@@ -13,6 +13,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { BASE_URL } from "@/lib/config";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
@@ -98,7 +99,11 @@ export default function GaleriaPage() {
                   <CarouselItem key={index}>
                     <div className="relative h-[600px] w-full cursor-pointer">
                       <Image
-                        src={image.url || "/placeholder.svg"}
+                        src={
+                          image.url
+                            ? `${BASE_URL}/${image.url}`
+                            : "/placeholder.svg"
+                        }
                         alt={`${habitacionSeleccionada?.nombre} - Imagen ${
                           index + 1
                         }`}

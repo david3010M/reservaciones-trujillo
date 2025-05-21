@@ -43,7 +43,7 @@ export default async function ReservarPage({ params }: PageProps) {
             <RoomInformation room={room} />
 
             {/* Right Column - Reservation Form */}
-            <ReservationForm id={id} />
+            <ReservationForm id={id} room={room} />
 
             {/* Reservation Details Section */}
             <ReservationDetails room={room} />

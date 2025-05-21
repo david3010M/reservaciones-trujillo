@@ -9,7 +9,9 @@ interface Props {
 }
 
 export default function ReservationDetails({ room }: Props) {
-  const { dateFrom, dateTo, people, nights } = useReservaStore();
+  const { dateFrom, dateTo, people, getNights } = useReservaStore();
+
+  const nights = getNights();
 
   const formatDate = (date: Date) => {
     return `${date.getDate()} Marzo ${date.getFullYear()}`;
@@ -76,7 +78,9 @@ export default function ReservationDetails({ room }: Props) {
           </div> */}
           <div className="flex justify-between font-medium">
             <span>Importe Total A Pagar</span>
-            <span className="text-lime-600 font-bold">S/{room.precio}</span>
+            <span className="text-lime-600 font-bold">
+              S/{Number(room.precio) * nights}
+            </span>
           </div>
         </div>
       </div>
