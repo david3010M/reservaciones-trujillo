@@ -1,40 +1,39 @@
 import {getReservaByCode} from "@/components/reserva/lib/reserva.actions";
-import {ReservaByCodeResponse} from "@/components/reserva/lib/reserva.interface";
 import Image from "next/image";
 import Link from "next/link";
-import {format} from "date-fns";
+import {format, parse} from "date-fns";
 import {es} from "date-fns/locale";
+import {getReservaSalonByCode} from "@/components/salones/lib/salon.actions";
+import {ReservaSalonCodeResponse} from "@/components/salones/lib/salon.interface";
+import {Check} from "lucide-react";
+import {Button} from "@/components/ui/button";
 
 export const dynamic = "force-dynamic";
 
 interface PageProps {
-    params: Promise<{ id: string }>;
+    params: Promise<{ packageId: string }>;
 }
 
 export default async function ConfirmacionPage({params}: PageProps) {
-    const {id} = await params;
-    const data: ReservaByCodeResponse | null = await getReservaByCode(id);
-    const room = data?.reserva.habitacion[0];
+    const {packageId} = await params;
+    const data: ReservaSalonCodeResponse | null = await getReservaSalonByCode(packageId);
+    const packageSalon = data?.reserva_paquete.paquete;
 
-    if (!room) {
+    if (!packageSalon) {
         return (
             <div className="min-h-screen flex items-center justify-center">
                 <div className="text-center">
                     <h1 className="text-2xl font-playfair mb-4">
-                        Habitación no encontrada
+                        Reserva de Salon no encontrada
                     </h1>
-                    <Link href="/habitaciones" className="text-[#d69c4f] hover:underline">
-                        Volver a habitaciones
+                    <Link href="/eventos" className="text-[#d69c4f] hover:underline">
+                        Volver a salones
                     </Link>
                 </div>
             </div>
         );
     }
 
-
-    const formatDate = (date: Date) => {
-        return format(date, "dd MMMM yyyy", {locale: es});
-    }
 
     return (
         <main className="min-h-screen">
@@ -52,7 +51,7 @@ export default async function ConfirmacionPage({params}: PageProps) {
 
                     <p className="text-gray-600 mb-8">
                         Comuníquese con el administrador si necesita cambiar la información
-                        básica con el número de reserva {data?.reserva.id}.
+                        básica con el número de reserva {data?.reserva_paquete.id}.
                     </p>
 
                     <div className="border border-gray-200 rounded-md overflow-hidden mb-8 pb-8">
@@ -91,13 +90,13 @@ export default async function ConfirmacionPage({params}: PageProps) {
                             <div className="p-4 !text-white bg-black">
                                 <div className="flex flex-col justify-between items-center md:items-start mb-2">
                                     <h3 className="text-lg font-poppins font-semibold mb-2 md:mb-0">
-                                        Recepciones Trujillo - {room.tipohabitacion.nombre}
+                                        Recepciones Trujillo - {data?.reserva_paquete.paquete.nombre}
                                     </h3>
                                     <div className="flex flex-col md:flex-row gap-4">
                                         <div className="flex items-center">
-                      <span className="text-sm">
-                        Fecha de reserva: {formatDate(new Date())}
-                      </span>
+                                          <span className="text-sm">
+                                            Fecha de reserva: {data?.reserva_paquete.fechareserva}
+                                          </span>
                                         </div>
                                     </div>
                                 </div>
@@ -109,18 +108,22 @@ export default async function ConfirmacionPage({params}: PageProps) {
                             <table className="w-full">
                                 <thead>
                                 <tr className="bg-[#A6A6A6] text-white">
-                                    <th className="py-3 px-4 center">Noches</th>
-                                    <th className="py-3 px-4 text-center">Check-In</th>
+                                    {/*<th className="py-3 px-4 center">Noches</th>*/}
+                                    <th className="py-3 px-4 text-center">Fecha</th>
                                     <th className="py-3 px-4 text-center">Cantidad Personas</th>
-                                    <th className="py-3 px-4 text-center">Tipo de habitación</th>
+                                    <th className="py-3 px-4 text-center">Tipo de paquete</th>
+                                    <th className="py-3 px-4 text-center">Precio de paquete</th>
+                                    <th className="py-3 px-4 text-center">Total</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr className="border-b border-gray-200">
-                                    <td className="py-4 px-4 text-center">{data?.reserva.dias}</td>
-                                    <td className="py-4 px-4 text-center">{data?.reserva.fechareserva}</td>
-                                    <td className="py-4 px-4 text-center">{data?.reserva.nropersonas}</td>
-                                    <td className="py-4 px-4 text-center">{data?.reserva.habitacion[0].tipohabitacion.nombre}</td>
+                                    {/*<td className="py-4 px-4 text-center">{data?.reserva_paquete.}</td>*/}
+                                    <td className="py-4 px-4 text-center">{data?.reserva_paquete.fechareserva}</td>
+                                    <td className="py-4 px-4 text-center">{data?.reserva_paquete.nropersonas}</td>
+                                    <td className="py-4 px-4 text-center">{data?.reserva_paquete.paquete.nombre}</td>
+                                    <td className="py-4 px-4 text-center">{data?.reserva_paquete.paquete.precio}</td>
+                                    <td className="py-4 px-4 text-center">{data?.reserva_paquete.total}</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -128,7 +131,10 @@ export default async function ConfirmacionPage({params}: PageProps) {
 
                         {/* Guest Info */}
                         <div className="p-4 border-t border-gray-200">
-                            <p className="font-medium">Adultos 1</p>
+                            <div className="flex gap-2">
+                                <Check className="text-hotel-gold size-6"/>
+                                <p className="font-medium">{data?.reserva_paquete.nropersonas} personas</p>
+                            </div>
                         </div>
                     </div>
 
@@ -149,9 +155,10 @@ export default async function ConfirmacionPage({params}: PageProps) {
                     <div className="flex flex-col md:flex-row gap-4 justify-center">
                         <Link
                             href="/"
-                            className="bg-[#d69c4f] text-white py-3 px-6 rounded-md text-center"
                         >
-                            Volver al inicio
+                            <Button variant="default" size="lg">
+                                Volver al inicio
+                            </Button>
                         </Link>
                         {/*<button className="border border-[#d69c4f] text-[#d69c4f] py-3 px-6 rounded-md">*/}
                         {/*    Imprimir confirmación*/}

@@ -4,6 +4,7 @@ import Image from "next/image";
 import {BASE_URL} from "@/lib/config";
 import {Button} from "@/components/ui/button";
 import {SalonResponseData} from "@/components/salones/lib/salon.interface";
+import Link from "next/link";
 
 interface Props {
     salon: SalonResponseData;
@@ -37,10 +38,13 @@ export default function SalonItem({salon, index}: Props) {
                 <p className="text-sm font-poppins mb-4 px-2">
                     {salon.descripcion_corta}
                 </p>
-                <Button className="uppercase tracking-widest rounded-none ripple-lg"
-                        variant={index === 1 || index === 4 ? 'secondary' : 'default'}>
-                    Más detalles
-                </Button>
+
+                <Link href={`/eventos/${salon.id}`}>
+                    <Button className="uppercase tracking-widest rounded-none ripple-lg"
+                            variant={index === 1 || index === 4 ? 'secondary' : 'default'}>
+                        Más detalles
+                    </Button>
+                </Link>
             </div>
         </div>
     );

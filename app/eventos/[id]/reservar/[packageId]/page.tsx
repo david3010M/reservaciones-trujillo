@@ -1,22 +1,25 @@
 import Link from "next/link";
 import {getTipoHabitacion} from "@/components/tipohabitacion/lib/tipohabitacion.actions";
 import {TipoHabitacionShowResponse} from "@/components/tipohabitacion/lib/tipohabitacion.interface";
-import ReservationForm from "@/components/reserva/ReservationForm";
-import ReservationDetails from "@/components/reserva/ReservationDetails";
-import RoomInformation from "@/components/reserva/RoomInformation";
+import ReservationDetails from "@/components/salones/ReservationDetails";
+import ReservationForm from "@/components/salones/ReservationForm";
+import SalonInformation from "@/components/salones/SalonInformation";
+import {getSalones} from "@/components/salones/lib/salon.actions";
 
 export const dynamic = "force-dynamic";
 
 interface PageProps {
-    params: Promise<{ id: string }>;
+    params: Promise<{ id: string, packageId: string }>;
 }
 
 export default async function ReservarPage({params}: PageProps) {
-    const {id} = await params;
-    const data: TipoHabitacionShowResponse | null = await getTipoHabitacion(id);
-    const room = data?.data;
+    const {id, packageId} = await params;
 
-    if (!room) {
+    const salones = await getSalones();
+    const salon = salones?.data.find((salon) => salon.id.toString() === id);
+    const packageSalon = salon?.paquetes.find((p) => p.id.toString() === packageId);
+
+    if (!salon) {
         return (
             <div className="min-h-screen flex items-center justify-center">
                 <div className="text-center">
@@ -25,6 +28,21 @@ export default async function ReservarPage({params}: PageProps) {
                     </h1>
                     <Link href="/habitaciones" className="text-[#d69c4f] hover:underline">
                         Volver a habitaciones
+                    </Link>
+                </div>
+            </div>
+        );
+    }
+
+    if (!packageSalon) {
+        return (
+            <div className="min-h-screen flex items-center justify-center">
+                <div className="text-center">
+                    <h1 className="text-2xl font-playfair mb-4">
+                        Paquete no encontrado
+                    </h1>
+                    <Link href="/eventos" className="text-[#d69c4f] hover:underline">
+                        Volver a salones
                     </Link>
                 </div>
             </div>
@@ -43,13 +61,13 @@ export default async function ReservarPage({params}: PageProps) {
                     <div
                         className="grid gap-8 grid-cols-1 grid-rows-[repeat(3,min-content)] md:grid-cols-5 md:grid-rows-[repeat(2,min-content)]">
                         {/* Left Column - Room Info */}
-                        <RoomInformation room={room}/>
+                        <SalonInformation salon={salon}/>
 
                         {/* Right Column - Reservation Form */}
-                        <ReservationForm id={id} room={room}/>
+                        <ReservationForm packageSalon={packageSalon} id={id} salon={salon}/>
 
                         {/* Reservation Details Section */}
-                        <ReservationDetails room={room}/>
+                        <ReservationDetails packageSalon={packageSalon} salon={salon}/>
                     </div>
                 </div>
             </section>
