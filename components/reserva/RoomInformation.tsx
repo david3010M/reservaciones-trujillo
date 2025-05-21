@@ -3,6 +3,7 @@
 import { CheckCircle, ChevronDown } from "lucide-react";
 import Image from "next/image";
 import { TipoHabitacionShowData } from "../tipohabitacion/lib/tipohabitacion.interface";
+import { BASE_URL } from "@/lib/config";
 
 interface Props {
   room: TipoHabitacionShowData;
@@ -16,9 +17,14 @@ export default function RoomInformation({ room }: Props) {
         {/* Room Images */}
         <div className="grid grid-cols-1 gap-4 mt-1 w-1/4">
           {room.imagenes.map((image, index) => (
-            <div className="relative aspect-square w-full rounded overflow-hidden" key={index}>
+            <div
+              className="relative aspect-square w-full rounded overflow-hidden"
+              key={index}
+            >
               <Image
-                src={image.url || "/placeholder.jpg"}
+                src={
+                  image.url ? `${BASE_URL}/${image.url}` : "/placeholder.jpg"
+                }
                 alt={`${room.nombre} - vista 2`}
                 fill
                 className="object-cover"

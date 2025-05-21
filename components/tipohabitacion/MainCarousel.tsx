@@ -18,6 +18,7 @@ import {
 import { useEffect, useState } from "react";
 import { HabitacionDisponibleResponseData } from "./lib/habitaciondisponible.interface";
 import { X } from "lucide-react";
+import { BASE_URL } from "@/lib/config";
 
 interface Props {
   room: HabitacionDisponibleResponseData;
@@ -57,8 +58,10 @@ export default function MainCarousel({ room }: Props) {
                 onClick={() => openModal(index)}
               >
                 <Image
-                  src={image.url || "/placeholder.svg"}
-                  alt={`${room.tipohabitacion.nombre} - Imagen ${index + 1}`}
+                  src={BASE_URL + "/" + image.url || "/placeholder.svg"}
+                  alt={`${BASE_URL}/${room.tipohabitacion.nombre} - Imagen ${
+                    index + 1
+                  }`}
                   fill
                   className="object-cover rounded-none"
                 />

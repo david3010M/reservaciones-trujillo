@@ -12,17 +12,24 @@ import {
 } from "@/components/ui/form";
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
-import {ReservaRequest} from "./lib/reserva.interface";
 import {SUCURSAL} from "@/lib/config";
-import useReservaStore from "./lib/reserva.store";
 import {format} from "date-fns";
 import {TipoHabitacionShowData} from "../tipohabitacion/lib/tipohabitacion.interface";
 import useHabitacionStore from "../tipohabitacion/lib/tipohabitacion.store";
 import {HabitacionesDisponibleResponse} from "../tipohabitacion/lib/habitacionesdisponible.interface";
 import {useEffect} from "react";
-import {createReservation} from "./lib/reserva.actions";
 import {errorToast, successToast} from "@/lib/core.function";
 import {useRouter} from "next/navigation";
+import {ReservaRequest} from "@/components/reserva/lib/reserva.interface";
+import useReservaStore from "@/components/reserva/lib/reserva.store";
+import {createReservation} from "@/components/reserva/lib/reserva.actions";
+import {
+    ReservaSalonRequest,
+    SalonResponseData,
+    SalonResponseDataPaquetes
+} from "@/components/salones/lib/salon.interface";
+import useReservaSalonStore from "@/components/salones/lib/reservaSalon.store";
+import {createReservationSalon} from "@/components/salones/lib/salon.actions";
 
 const reservationSchema = z.object({
     nrodoc: z.string().min(8, "Número de documento requerido"),
@@ -38,10 +45,11 @@ type ReservationFormValues = z.infer<typeof reservationSchema>;
 
 interface Props {
     id: string;
-    room: TipoHabitacionShowData;
+    salon: SalonResponseData;
+    packageSalon: SalonResponseDataPaquetes;
 }
 
-export default function ReservationForm({id, room}: Props) {
+export default function ReservationForm({id, salon, packageSalon}: Props) {
     const router = useRouter();
 
     const form = useForm<ReservationFormValues>({
@@ -57,38 +65,20 @@ export default function ReservationForm({id, room}: Props) {
         },
     });
 
-    const {dateFrom, getNights, people} = useReservaStore();
-    const {habitaciones, loadHabitaciones} = useHabitacionStore();
+    const {dateFrom, getNights, people} = useReservaSalonStore();
 
-    useEffect(() => {
-        loadHabitaciones();
-    }, []);
-
-    function obtenerPrimerHabitacionId(
-        data: HabitacionesDisponibleResponse
-    ): number | undefined {
-        const claves = Object.keys(data.data);
-        if (claves.length === 0) return undefined;
-
-        const primerDato = data.data[claves[0]];
-        return primerDato.habitaciones[0]?.id;
-    }
 
     const onSubmit = async (data: ReservationFormValues) => {
-        const precio = Number(room.precio);
+        const precio = Number(packageSalon.precio);
         const dateFormatted = format(dateFrom, "yyyy-MM-dd");
 
-        const newReservation: ReservaRequest = {
+        const newReservation: ReservaSalonRequest = {
             sucursal_id: SUCURSAL,
-            fechavencimiento: dateFormatted,
-            noches: getNights(),
-            total: precio * getNights(),
-            adelanto: 0,
-            preciohabitacion: precio,
-            medio_pago_adelanto_id: null,
+            salon_package_id: packageSalon.id,
+            fechareserva: dateFormatted,
+            total: precio * people,
             nropersonas: people,
-            comentario: "Reserva desde la web",
-            habitacion_id: obtenerPrimerHabitacionId(habitaciones),
+            comentario: "Reserva de salón desde la web",
             persona: {
                 nombres: data.nombres,
                 apellidos: `${data.apellidoPaterno} ${data.apellidoMaterno}`,
@@ -100,13 +90,13 @@ export default function ReservationForm({id, room}: Props) {
         };
 
         console.log(newReservation);
-        await createReservation(newReservation).then((res) => {
+        await createReservationSalon(newReservation).then((res) => {
             if (res.success) {
                 successToast("Reserva creada con éxito");
                 form.reset();
                 // Redirigir a la página de confirmación
                 router.push(
-                    `/habitaciones/${dateFormatted}/${res.codigo_reserva}/reservar/confirmacion`
+                    `/eventos/${id}/reservar/${res.codigo_reserva}/confirmacion`
                 );
             } else {
                 errorToast("Error al crear la reserva", "Por favor intente nuevamente");
