@@ -23,6 +23,7 @@ import {
 import useReservaSalonStore from "@/components/salones/lib/reservaSalon.store";
 import { createReservationSalon } from "@/components/salones/lib/salon.actions";
 import { reservationSchema } from "../reserva/ReservationForm";
+import { PhoneInput } from "../phone-input";
 
 type ReservationFormValues = z.infer<typeof reservationSchema>;
 
@@ -175,20 +176,14 @@ export default function ReservationForm({ id, packageSalon }: Props) {
                   control={form.control}
                   name="telefono"
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Número Móvil</FormLabel>
-                      <FormControl>
-                        <div className="flex">
-                          <div className="border border-gray-300 rounded-l-md p-2 bg-gray-50 flex items-center">
-                            <span className="text-sm">🇵🇪</span>
-                          </div>
-                          <Input
-                            type="tel"
-                            className="rounded-l-none"
-                            placeholder="Número de teléfono"
-                            {...field}
-                          />
-                        </div>
+                    <FormItem className="flex flex-col items-start mt-2">
+                      <FormLabel className="text-left">Teléfono</FormLabel>
+                      <FormControl className="w-full">
+                        <PhoneInput
+                          defaultCountry="PE"
+                          placeholder="Enter a phone number"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

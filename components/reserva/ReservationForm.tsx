@@ -16,13 +16,14 @@ import { ReservaRequest } from "./lib/reserva.interface";
 import { SUCURSAL } from "@/lib/config";
 import useReservaStore from "./lib/reserva.store";
 import { format } from "date-fns";
-import { TipoHabitacionShowData } from "../tipohabitacion/lib/tipohabitacion.interface";
 import useHabitacionStore from "../tipohabitacion/lib/tipohabitacion.store";
-import { HabitacionesDisponibleResponse } from "../tipohabitacion/lib/habitacionesdisponible.interface";
 import { useEffect } from "react";
 import { createReservation } from "./lib/reserva.actions";
 import { errorToast, successToast } from "@/lib/core.function";
 import { useRouter } from "next/navigation";
+import { HabitacionesDisponibleResponseData } from "../tipohabitacion/lib/habitacionesdisponible.interface";
+import { isValidPhoneNumber } from "react-phone-number-input";
+import { PhoneInput } from "../phone-input";
 
 export const reservationSchema = z.object({
   nrodoc: z
@@ -51,22 +52,34 @@ export const reservationSchema = z.object({
       message: "Solo se permiten letras y espacios",
     }),
   email: z.string().email("Email inválido"),
-  telefono: z.string().min(6, "Número inválido").regex(/^\d+$/, {
-    message: "Solo se permiten números",
-  }).refine((val) => val.length === 9, {
-    message: "Número inválido",
-  }),
+  telefono: z
+    .string()
+    .min(6, "Número inválido")
+    .regex(/^\+?\d+$/, {
+      message: "Solo se permiten números",
+    })
+    .refine((val) => isValidPhoneNumber(val), {
+      message: "Número inválido",
+    }),
   address: z.string().optional(),
 });
 
 type ReservationFormValues = z.infer<typeof reservationSchema>;
 
 interface Props {
-  room: TipoHabitacionShowData;
+  room: HabitacionesDisponibleResponseData;
 }
 
 export default function ReservationForm({ room }: Props) {
   const router = useRouter();
+  const { habitacionId } = useReservaStore();
+
+  let habitacion = room.habitaciones.find(
+    (habitacion) => habitacion.id === habitacionId
+  );
+
+  if (!habitacion) {
+  }
 
   const form = useForm<ReservationFormValues>({
     resolver: zodResolver(reservationSchema),
@@ -84,24 +97,14 @@ export default function ReservationForm({ room }: Props) {
   });
 
   const { dateFrom, getNights, people } = useReservaStore();
-  const { habitaciones, loadHabitaciones } = useHabitacionStore();
+  const { loadHabitaciones } = useHabitacionStore();
 
   useEffect(() => {
     loadHabitaciones();
   }, []);
 
-  function obtenerPrimerHabitacionId(
-    data: HabitacionesDisponibleResponse
-  ): number | undefined {
-    const claves = Object.keys(data.data);
-    if (claves.length === 0) return undefined;
-
-    const primerDato = data.data[claves[0]];
-    return primerDato.habitaciones[0]?.id;
-  }
-
   const onSubmit = async (data: ReservationFormValues) => {
-    const precio = Number(room.precio);
+    const precio = Number(room.tipohabitacion.precio);
     const dateFormatted = format(dateFrom, "yyyy-MM-dd");
 
     const newReservation: ReservaRequest = {
@@ -114,7 +117,7 @@ export default function ReservationForm({ room }: Props) {
       medio_pago_adelanto_id: null,
       nropersonas: people,
       comentario: "Reserva desde la web",
-      habitacion_id: obtenerPrimerHabitacionId(habitaciones),
+      habitacion_id: habitacion?.id,
       persona: {
         nombres: data.nombres,
         apellidos: `${data.apellidoPaterno} ${data.apellidoMaterno}`,
@@ -239,20 +242,14 @@ export default function ReservationForm({ room }: Props) {
                   control={form.control}
                   name="telefono"
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Número Móvil</FormLabel>
-                      <FormControl>
-                        <div className="flex">
-                          <div className="border border-gray-300 rounded-l-md p-2 bg-gray-50 flex items-center">
-                            <span className="text-sm">🇵🇪</span>
-                          </div>
-                          <Input
-                            type="tel"
-                            className="rounded-l-none"
-                            placeholder="Número de teléfono"
-                            {...field}
-                          />
-                        </div>
+                    <FormItem className="flex flex-col items-start mt-2">
+                      <FormLabel className="text-left">Teléfono</FormLabel>
+                      <FormControl className="w-full">
+                        <PhoneInput
+                          defaultCountry="PE"
+                          placeholder="Enter a phone number"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
