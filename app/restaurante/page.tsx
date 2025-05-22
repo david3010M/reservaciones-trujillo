@@ -3,6 +3,7 @@ import IntroSection from "@/components/restaurante/IntroSection";
 import CarouselMiddleWitdh from "@/components/restaurante/CarouselCustomWitdh";
 import OurServices from "@/components/restaurante/OurServices";
 import Catering from "@/components/restaurante/Catering";
+import ContactRestaurant from "@/components/ContactRestaurant";
 
 export default function Home() {
   return (
@@ -24,6 +25,9 @@ export default function Home() {
 
       {/* Catering */}
       <Catering />
+
+      {/* Contactanos */}
+      <ContactRestaurant />
     </main>
   );
 }
