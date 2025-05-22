@@ -1,12 +1,12 @@
 "use client";
 
-import { CheckCircle, ChevronDown } from "lucide-react";
+import { CheckCircle } from "lucide-react";
 import Image from "next/image";
-import { TipoHabitacionShowData } from "../tipohabitacion/lib/tipohabitacion.interface";
 import { BASE_URL } from "@/lib/config";
+import { HabitacionesDisponibleResponseData } from "../tipohabitacion/lib/habitacionesdisponible.interface";
 
 interface Props {
-  room: TipoHabitacionShowData;
+  room: HabitacionesDisponibleResponseData;
 }
 
 export default function RoomInformation({ room }: Props) {
@@ -16,7 +16,7 @@ export default function RoomInformation({ room }: Props) {
       <div className="overflow-hidden flex">
         {/* Room Images */}
         <div className="grid grid-cols-1 gap-4 mt-1 w-1/4">
-          {room.imagenes.map((image, index) => (
+          {room.tipohabitacion.imagenes.map((image, index) => (
             <div
               className="relative aspect-square w-full rounded overflow-hidden"
               key={index}
@@ -25,7 +25,7 @@ export default function RoomInformation({ room }: Props) {
                 src={
                   image.url ? `${BASE_URL}/${image.url}` : "/placeholder.jpg"
                 }
-                alt={`${room.nombre} - vista 2`}
+                alt={`${room.tipohabitacion.nombre} - vista 2`}
                 fill
                 className="object-cover"
                 onError={(e) => {
@@ -39,7 +39,9 @@ export default function RoomInformation({ room }: Props) {
         <div className="flex flex-col gap-4 w-3/4 p-4">
           {/* Room Name and Rating */}
           <div className="grid gap-3">
-            <h2 className="text-xl font-poppins font-bold">{room.nombre}</h2>
+            <h2 className="text-xl font-poppins font-bold">
+              {room.tipohabitacion.nombre}
+            </h2>
             <div className="flex items-center justify-between w-3/5">
               <span className="text-sm mr-2">Valoración</span>
               {/* <ChevronDown className="h-4 w-4 mr-2" /> */}
@@ -57,7 +59,7 @@ export default function RoomInformation({ room }: Props) {
 
           {/* Amenities */}
           <div className="">
-            {room.descripcion.map((amenity, index) => (
+            {room.tipohabitacion.descripcion.map((amenity, index) => (
               <div
                 key={index}
                 className="flex items-center py-1 border-b border-gray-100"

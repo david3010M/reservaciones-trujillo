@@ -1,5 +1,5 @@
 "use client";
-import { format, parse } from "date-fns";
+import { parse } from "date-fns";
 import { create } from "zustand";
 
 interface ReservaState {
@@ -7,11 +7,13 @@ interface ReservaState {
   dateTo: Date;
   people: number;
   nights: number;
+  habitacionId: number;
   getNights: () => number;
   setPeople: (people: number) => void;
   setDateFrom: (date: Date) => void;
   setDateTo: (date: Date) => void;
   initializeReserva: () => void;
+  setHabitacionId: (habitacionId: number) => void;
 }
 
 const today = new Date();
@@ -23,6 +25,7 @@ const useReservaStore = create<ReservaState>((set, get) => ({
   dateTo: tomorrow,
   people: 1, // inicial fijo
   nights: 1,
+  habitacionId: 0,
   getNights: () => {
     const { dateFrom, dateTo } = get();
     const diffTime = Math.abs(dateTo.getTime() - dateFrom.getTime());
@@ -47,12 +50,19 @@ const useReservaStore = create<ReservaState>((set, get) => ({
     }
     set({ dateTo: date });
   },
+  setHabitacionId: (habitacionId: number) => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("habitacionId", habitacionId.toString());
+    }
+    set({ habitacionId });
+  },
   initializeReserva: () => {
     if (typeof window === "undefined") return;
 
     const storedPeople = localStorage.getItem("people");
     const storedDateFrom = localStorage.getItem("dateFrom");
     const storedDateTo = localStorage.getItem("dateTo");
+    const storedHabitacionId = localStorage.getItem("habitacionId");
 
     const dateFrom = storedDateFrom
       ? parse(storedDateFrom, "yyyy-MM-dd", new Date())
@@ -66,6 +76,7 @@ const useReservaStore = create<ReservaState>((set, get) => ({
       people,
       dateFrom,
       dateTo,
+      habitacionId: storedHabitacionId ? Number(storedHabitacionId) : 0,
     });
   },
 }));

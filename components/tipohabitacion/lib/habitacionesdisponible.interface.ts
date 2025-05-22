@@ -1,10 +1,10 @@
 export interface HabitacionesDisponibleResponse {
   status: boolean;
   message: string;
-  data: { [key: string]: Datum };
+  data: { [key: string]: HabitacionesDisponibleResponseData };
 }
 
-export interface Datum {
+export interface HabitacionesDisponibleResponseData {
   tipohabitacion: Tipohabitacion;
   habitaciones: Habitacione[];
 }
