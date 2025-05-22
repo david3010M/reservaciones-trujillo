@@ -10,8 +10,26 @@ import {
   SelectValue,
 } from "./ui/select";
 import { Button } from "./ui/button";
+import { useEffect, useState } from "react";
+import { TipoHabitacionResponse } from "./tipohabitacion/lib/tipohabitacion.interface";
+import { getTiposHabitacion } from "./tipohabitacion/lib/tipohabitacion.actions";
 
 export default function Contact() {
+  const [tiposHabitacion, setTiposHabitacion] =
+    useState<TipoHabitacionResponse>({
+      success: false,
+      data: [],
+    });
+
+  useEffect(() => {
+    const fetchTiposHabitacion = async () => {
+      const data = await getTiposHabitacion();
+      setTiposHabitacion(data);
+    };
+
+    fetchTiposHabitacion();
+  }, []);
+
   return (
     <section className="py-8 bg-[#f0e9df]">
       <div className="container mx-auto px-4">
@@ -65,9 +83,12 @@ export default function Contact() {
                     <SelectValue placeholder="Tipo de Servicio" className="" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="tipo1">Tipo 1</SelectItem>
-                    <SelectItem value="tipo2">Tipo 2</SelectItem>
-                    <SelectItem value="tipo3">Tipo 3</SelectItem>
+                    {tiposHabitacion.success &&
+                      tiposHabitacion.data.map((tipo) => (
+                        <SelectItem key={tipo.id} value={tipo.nombre}>
+                          {tipo.nombre}
+                        </SelectItem>
+                      ))}
                   </SelectContent>
                 </Select>
               </div>

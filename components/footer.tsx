@@ -13,7 +13,6 @@ export default function Footer() {
   ];
   const linksColumn2 = [
     { label: "Evento", link: "/eventos" },
-    { label: "Reservas", link: "/reservas" },
     { label: "Galería", link: "/galeria" },
     { label: "Contacto", link: "/contacto" },
   ];
