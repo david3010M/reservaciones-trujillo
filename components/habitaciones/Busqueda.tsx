@@ -114,7 +114,7 @@ export default function Busqueda() {
                 size="icon"
                 onClick={() => setPeople(people + 1)}
                 className="p-2 max-h-6 max-w-6"
-                disabled={people >= 5}
+                disabled={people >= 10}
               >
                 <ChevronUp className="max-h-4 max-w-4" />
               </Button>

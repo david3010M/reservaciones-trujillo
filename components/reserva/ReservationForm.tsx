@@ -134,9 +134,7 @@ export default function ReservationForm({ room }: Props) {
         if (res.success) {
           successToast("Reserva creada con éxito");
           form.reset();
-          router.push(
-            `/habitaciones/${dateFormatted}/${res.codigo_reserva}/reservar/confirmacion`
-          );
+          router.push(`/reservacion/${res.codigo_reserva}`);
         } else {
           errorToast("Error al crear la reserva");
         }

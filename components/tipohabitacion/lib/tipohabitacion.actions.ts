@@ -25,14 +25,13 @@ export async function getTipoHabitacion(
 export async function getHabitacionesDisponible({
   fechaDesde,
   fechaHasta,
-  idTipoHabitacion,
 }: {
   fechaDesde: string;
   fechaHasta?: string;
   idTipoHabitacion?: number;
 }): Promise<HabitacionesDisponibleResponse> {
   const { data } = await api.get<HabitacionesDisponibleResponse>(
-    `/habitaciones/disponibles/${fechaDesde}/${SUCURSAL}`
+    `/habitaciones/disponibles/${fechaDesde}/${fechaHasta}/${SUCURSAL}`
   );
   return data;
 }
@@ -46,12 +45,8 @@ export async function getHabitacionDisponible({
   fechaHasta?: string;
   idTipoHabitacion?: number;
 }): Promise<HabitacionDisponibleResponse> {
-  console.log("fechaDesde", fechaDesde);
-  console.log("fechaHasta", fechaHasta);
-  console.log("idTipoHabitacion", idTipoHabitacion);
   const { data } = await api.get<HabitacionDisponibleResponse>(
-    `/habitaciones/disponibles/${fechaDesde}/${SUCURSAL}/${idTipoHabitacion}`
+    `/habitaciones/disponibles/${fechaDesde}/${fechaHasta}/${SUCURSAL}/${idTipoHabitacion}`
   );
-  console.log(data);
   return data;
 }

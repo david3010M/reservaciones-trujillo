@@ -33,6 +33,7 @@ const useHabitacionStore = create<HabitacionState>((set) => ({
       : date || new Date().toISOString().slice(0, 10);
     const data = await getHabitacionesDisponible({
       fechaDesde: dateFrom,
+      fechaHasta: dateFrom,
     });
     set({ habitaciones: data, loading: false });
   },
