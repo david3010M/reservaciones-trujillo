@@ -1,8 +1,5 @@
-import {getReservaByCode} from "@/components/reserva/lib/reserva.actions";
 import Image from "next/image";
 import Link from "next/link";
-import {format, parse} from "date-fns";
-import {es} from "date-fns/locale";
 import {getReservaSalonByCode} from "@/components/salones/lib/salon.actions";
 import {ReservaSalonCodeResponse} from "@/components/salones/lib/salon.interface";
 import {Check} from "lucide-react";

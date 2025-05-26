@@ -9,19 +9,20 @@ import TablaHabitacionesDisponible from "@/components/tipohabitacion/TablaHabita
 export const dynamic = "force-dynamic";
 
 interface PageProps {
-  params: Promise<{ id: string; date: string }>;
+  params: Promise<{ id: string; date: string; dateTo: string }>;
 }
 
 export default async function RoomDetailPage({ params }: PageProps) {
-  const { id, date } = await params;
+  const { id, date, dateTo } = await params;
 
-  if (!id || !date) {
+  if (!id || !date || !dateTo) {
     return <HabitacionNotFound />;
   }
 
   const data: HabitacionDisponibleResponse | null =
     await getHabitacionDisponible({
       fechaDesde: date,
+      fechaHasta: dateTo,
       idTipoHabitacion: Number(id),
     });
 
@@ -43,7 +44,11 @@ export default async function RoomDetailPage({ params }: PageProps) {
             <MainCarousel room={room} />
             <DescriptionHabitacion date={date} room={room} />
           </div>
-          <TablaHabitacionesDisponible room={room} date={date} />
+          <TablaHabitacionesDisponible
+            room={room}
+            date={date}
+            dateTo={dateTo}
+          />
         </div>
         {/* <div className="container">
           <TableHabitaciones room={room} />

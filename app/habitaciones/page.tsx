@@ -11,7 +11,7 @@ import { format } from "date-fns";
 
 export default function HabitacionesPage() {
   const { habitaciones, loading } = useHabitacionStore();
-  const { dateFrom } = useReservaStore();
+  const { dateFrom, dateTo, people } = useReservaStore();
 
   return (
     <main className="min-h-screen">
@@ -39,13 +39,17 @@ export default function HabitacionesPage() {
                 ? Array.from({ length: 4 }).map((_, idx) => (
                     <HabitacionSkeleton key={idx} />
                   ))
-                : Object.entries(habitaciones.data).map(([key, room]) => (
-                    <HabitacionItem
-                      key={key}
-                      dateFrom={format(dateFrom, "yyyy-MM-dd")}
-                      room={room as HabitacionDisponibleResponseData}
-                    />
-                  ))}
+                : Object.entries(habitaciones.data).map(
+                    ([key, room]) =>
+                      people <= room.tipohabitacion.capacidad && (
+                        <HabitacionItem
+                          key={key}
+                          dateFrom={format(dateFrom, "yyyy-MM-dd")}
+                          dateTo={format(dateTo, "yyyy-MM-dd")}
+                          room={room as HabitacionDisponibleResponseData}
+                        />
+                      )
+                  )}
             </div>
           </div>
         </div>

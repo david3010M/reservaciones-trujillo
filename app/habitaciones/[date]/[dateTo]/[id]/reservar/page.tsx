@@ -8,13 +8,13 @@ import { HabitacionesDisponibleResponse } from "@/components/tipohabitacion/lib/
 export const dynamic = "force-dynamic";
 
 interface PageProps {
-  params: Promise<{ id: string; date: string }>;
+  params: Promise<{ id: string; date: string; dateTo: string }>;
 }
 
 export default async function ReservarPage({ params }: PageProps) {
-  const { id, date } = await params;
+  const { id, date, dateTo } = await params;
   const data: HabitacionesDisponibleResponse | null =
-    await getHabitacionesDisponible({ fechaDesde: date });
+    await getHabitacionesDisponible({ fechaDesde: date, fechaHasta: dateTo });
   const room = data?.data[id];
 
   if (!room) {

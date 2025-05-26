@@ -8,12 +8,12 @@ import { es } from "date-fns/locale";
 export const dynamic = "force-dynamic";
 
 interface PageProps {
-  params: Promise<{ id: string }>;
+  params: Promise<{ code: string }>;
 }
 
 export default async function ConfirmacionPage({ params }: PageProps) {
-  const { id } = await params;
-  const data: ReservaByCodeResponse | null = await getReservaByCode(id);
+  const { code } = await params;
+  const data: ReservaByCodeResponse | null = await getReservaByCode(code);
   const room = data?.reserva.habitacion[0];
 
   if (!room) {
@@ -21,7 +21,7 @@ export default async function ConfirmacionPage({ params }: PageProps) {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-playfair mb-4">
-            Habitación no encontrada
+            Reservacion no encontrada
           </h1>
           <Link href="/habitaciones" className="text-[#d69c4f] hover:underline">
             Volver a habitaciones
@@ -146,7 +146,7 @@ export default async function ConfirmacionPage({ params }: PageProps) {
 
             {/* Guest Info */}
             <div className="p-4 border-t border-gray-200">
-              <p className="font-medium">Adultos 1</p>
+              <p className="font-medium">Adultos {data?.reserva.nropersonas}</p>
             </div>
           </div>
 
