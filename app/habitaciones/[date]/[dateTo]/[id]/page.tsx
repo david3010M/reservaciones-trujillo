@@ -28,7 +28,7 @@ export default async function RoomDetailPage({ params }: PageProps) {
 
   const room = data?.data[id];
 
-  if (!data || !data.status) {
+  if (!data || !data.status || !room) {
     return <HabitacionNotFound />;
   }
 
