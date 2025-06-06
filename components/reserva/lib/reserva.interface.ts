@@ -1,69 +1,75 @@
 export interface ReservaRequest {
-    sucursal_id: number;
-    fechavencimiento: string;
-    noches: number;
-    total: number;
-    adelanto: number;
-    preciohabitacion: number;
-    medio_pago_adelanto_id: number | null;
-    nropersonas: number;
-    comentario: string;
-    habitacion_id?: number;
-    persona: Persona;
+  sucursal_id: number;
+  fechavencimiento: string;
+  noches: number;
+  total: number;
+  adelanto: number;
+  preciohabitacion: number;
+  medio_pago_adelanto_id: number | null;
+  nropersonas: number;
+  comentario: string;
+  habitacion_id?: number;
+  persona: Persona;
+  persona_facturacion?: PersonaFacturacion;
 }
 
 interface Persona {
-    nombres: string;
-    apellidos: string;
-    nrodoc: string;
-    telefono: string;
-    email: string;
-    direccion: string;
+  nombres: string;
+  apellidos: string;
+  nrodoc: string;
+  telefono: string;
+  email: string;
+  direccion: string;
+}
+
+export interface PersonaFacturacion extends Persona {
+  telefonofijo: string;
+  telefonomovil: string;
 }
 
 export interface ReservaResponse {
-    success: boolean;
-    message: string;
-    codigo_reserva: number;
-    email_sent_to: string;
+  success: boolean;
+  message: string;
+  codigo_reserva: number;
+  email_sent_to: string;
 }
 
 export interface ReservaByCodeResponse {
-    success: boolean;
-    reserva: Reserva;
+  success: boolean;
+  reserva: Reserva;
 }
 
 interface Reserva {
-    id: number;
-    fechareserva: string;
-    dias: number;
-    estado: string;
-    modo: string;
-    habitacion: Habitacion[];
-    total: string;
-    adelanto: string;
-    celular: null;
-    email: string;
-    comentario: string;
-    nropersonas: number;
-    sucursal: string;
-    motivo: null;
-    origen: null;
-    mediopago: null;
+  id: number;
+  fechareserva: string;
+  dias: number;
+  estado: string;
+  modo: string;
+  habitacion: Habitacion[];
+  total: string;
+  adelanto: string;
+  celular: null;
+  email: string;
+  comentario: string;
+  nropersonas: number;
+  sucursal: string;
+  motivo: null;
+  origen: null;
+  mediopago: null;
 }
 
 interface Habitacion {
-    habitacion_id: number;
-    numero: string;
-    situacion: string;
-    descripcion: string;
-    piso: string;
-    tipohabitacion: Tipohabitacion;
-    precio: string;
+  habitacion_id: number;
+  numero: string;
+  situacion: string;
+  descripcion: string;
+  piso: string;
+  tipohabitacion: Tipohabitacion;
+  precio: string;
 }
 
 interface Tipohabitacion {
-    nombre: string;
-    capacidad: number;
-    precio: string;
+  nombre: string;
+  capacidad: number;
+  precio: string;
 }

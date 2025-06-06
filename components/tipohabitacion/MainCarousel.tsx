@@ -51,23 +51,51 @@ export default function MainCarousel({ room }: Props) {
         }}
       >
         <CarouselContent>
-          {room.tipohabitacion.imagenes.map((image, index) => (
-            <CarouselItem key={index}>
+          {room.tipohabitacion.imagenes.length > 0 ? (
+            room.tipohabitacion.imagenes.map((image, index) => (
+              <CarouselItem key={index}>
+                <div
+                  className="relative h-[400px] w-full cursor-pointer"
+                  onClick={() => openModal(index)}
+                >
+                  <Image
+                    src={BASE_URL + "/" + image.url || "/placeholder.svg"}
+                    alt={`${BASE_URL}/${room.tipohabitacion.nombre} - Imagen ${
+                      index + 1
+                    }`}
+                    fill
+                    className="object-cover rounded-none"
+                    onError={(
+                      e: React.SyntheticEvent<HTMLImageElement, Event>
+                    ) => {
+                      e.currentTarget.src = "/placeholder.svg";
+                    }}
+                  />
+                </div>
+              </CarouselItem>
+            ))
+          ) : (
+            <CarouselItem key={1}>
               <div
                 className="relative h-[400px] w-full cursor-pointer"
-                onClick={() => openModal(index)}
+                onClick={() => openModal(1)}
               >
                 <Image
-                  src={BASE_URL + "/" + image.url || "/placeholder.svg"}
-                  alt={`${BASE_URL}/${room.tipohabitacion.nombre} - Imagen ${
-                    index + 1
-                  }`}
+                  src={"/placeholder.svg"}
+                  alt={`${BASE_URL}/${
+                    room.tipohabitacion.nombre
+                  } - Imagen ${1}`}
                   fill
                   className="object-cover rounded-none"
+                  onError={(
+                    e: React.SyntheticEvent<HTMLImageElement, Event>
+                  ) => {
+                    e.currentTarget.src = "/placeholder.svg";
+                  }}
                 />
               </div>
             </CarouselItem>
-          ))}
+          )}
         </CarouselContent>
         <CarouselPrevious className="!absolute left-2 bg-black/50 text-white border-none hover:bg-black/70" />
         <CarouselNext className="!absolute right-2 bg-black/50 text-white border-none hover:bg-black/70" />
@@ -123,20 +151,33 @@ export default function MainCarousel({ room }: Props) {
             }}
           >
             <CarouselContent>
-              {room.tipohabitacion.imagenes.map((image, index) => (
-                <CarouselItem key={index}>
+              {room.tipohabitacion.imagenes.length > 0 ? (
+                room.tipohabitacion.imagenes.map((image, index) => (
+                  <CarouselItem key={index}>
+                    <div className="relative h-[80vh] w-full">
+                      <Image
+                        src={BASE_URL + "/" + image.url || "/placeholder.svg"}
+                        alt={`${room.tipohabitacion.nombre} - Imagen ${
+                          index + 1
+                        }`}
+                        fill
+                        className="object-contain"
+                      />
+                    </div>
+                  </CarouselItem>
+                ))
+              ) : (
+                <CarouselItem key={1}>
                   <div className="relative h-[80vh] w-full">
                     <Image
-                      src={image.url || "/placeholder.svg"}
-                      alt={`${room.tipohabitacion.nombre} - Imagen ${
-                        index + 1
-                      }`}
+                      src={"/placeholder.svg"}
+                      alt={`${room.tipohabitacion.nombre} - Imagen ${1}`}
                       fill
                       className="object-contain"
                     />
                   </div>
                 </CarouselItem>
-              ))}
+              )}
             </CarouselContent>
             <CarouselPrevious className="!absolute left-4 bg-black/50 text-white border-none hover:bg-black/70" />
             <CarouselNext className="!absolute right-4 bg-black/50 text-white border-none hover:bg-black/70" />

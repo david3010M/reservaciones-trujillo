@@ -4,6 +4,7 @@ import ReservationForm from "@/components/reserva/ReservationForm";
 import ReservationDetails from "@/components/reserva/ReservationDetails";
 import RoomInformation from "@/components/reserva/RoomInformation";
 import { HabitacionesDisponibleResponse } from "@/components/tipohabitacion/lib/habitacionesdisponible.interface";
+import StepIndicator from "@/components/step-indicator";
 
 export const dynamic = "force-dynamic";
 
@@ -37,6 +38,11 @@ export default async function ReservarPage({ params }: PageProps) {
       {/* Reservation Form */}
       <section className="py-12 bg-white">
         <div className="container mx-auto px-4">
+          <div className="pb-8">
+            <div className="container mx-auto px-4">
+              <StepIndicator currentStep={"reserva"} />
+            </div>
+          </div>
           <h1 className="text-3xl font-lato font-bold mb-8">
             Gestionar tu reserva
           </h1>

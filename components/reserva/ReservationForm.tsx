@@ -35,11 +35,11 @@ import { PhoneInput } from "../phone-input";
 const reservationSchema = z
   .object({
     tipoComprobante: z.enum(["BOLETA", "FACTURA"]),
-    tipoDocumento: z.enum(["DNI", "CE", "PASAPORTE"]).optional(),
+    tipoDocumento: z.enum(["DNI", "CE", "PASAPORTE", "RUC"]).optional(),
     nrodoc: z
       .string()
       .nonempty("Debes ingresar tu documento")
-      .regex(/^\d+$/, { message: "Solo se permiten números" })
+      .regex(/^[0-9]+$/, { message: "Solo se permiten números" })
       .refine((val) => val.length === 8 || val.length === 11, {
         message: "Documento inválido",
       }),
@@ -47,44 +47,61 @@ const reservationSchema = z
     apellidoPaterno: z.string().optional(),
     apellidoMaterno: z.string().optional(),
     razonSocial: z.string().optional(),
-    direccionFacturacion: z.string().nonempty("Dirección requerida"),
+    direccionFacturacion: z.string().optional(),
     email: z.string().email("Email inválido"),
     telefono: z
       .string()
       .min(6, "Número inválido")
-      .regex(/^\+?\d+$/, {
+      .regex(/^\+?[0-9]+$/, {
         message: "Solo se permiten números",
       })
       .refine((val) => isValidPhoneNumber(val), {
         message: "Número inválido",
       }),
     address: z.string().optional(),
+    telefonofijo: z.string().optional(),
+    telefonomovil: z
+      .string()
+      .min(6, "Número inválido")
+      .regex(/^\+?[0-9]+$/, {
+        message: "Solo se permiten números",
+      })
+      .refine((val) => isValidPhoneNumber(val), {
+        message: "Número inválido",
+      }),
   })
   .superRefine((data, ctx) => {
-    if (data.tipoComprobante === "BOLETA") {
-      if (!data.tipoDocumento) {
+    if (!data.tipoDocumento) {
+      ctx.addIssue({
+        path: ["tipoDocumento"],
+        code: z.ZodIssueCode.custom,
+        message: "Selecciona un tipo de documento",
+      });
+    }
+    if (data.tipoComprobante === "BOLETA" && data.tipoDocumento === "DNI") {
+      if (!data.nombres || !data.apellidoPaterno || !data.apellidoMaterno) {
         ctx.addIssue({
-          path: ["tipoDocumento"],
+          path: ["nombres"],
           code: z.ZodIssueCode.custom,
-          message: "Selecciona un tipo de documento",
+          message: "Nombres y apellidos requeridos",
         });
       }
-      if (data.tipoDocumento === "DNI") {
-        if (!data.nombres || !data.apellidoPaterno || !data.apellidoMaterno) {
-          ctx.addIssue({
-            path: ["nombres"],
-            code: z.ZodIssueCode.custom,
-            message: "Nombres y apellidos requeridos",
-          });
-        }
-      }
     }
-    if (data.tipoComprobante === "FACTURA" && !data.razonSocial) {
-      ctx.addIssue({
-        path: ["razonSocial"],
-        code: z.ZodIssueCode.custom,
-        message: "Razón Social requerida",
-      });
+    if (data.tipoComprobante === "FACTURA") {
+      if (!data.razonSocial) {
+        ctx.addIssue({
+          path: ["razonSocial"],
+          code: z.ZodIssueCode.custom,
+          message: "Razón Social requerida",
+        });
+      }
+      if (!data.direccionFacturacion) {
+        ctx.addIssue({
+          path: ["direccionFacturacion"],
+          code: z.ZodIssueCode.custom,
+          message: "Dirección requerida",
+        });
+      }
     }
   });
 
@@ -115,20 +132,100 @@ export default function ReservationForm({ room }: Props) {
       email: "",
       telefono: "",
       address: "",
+      telefonofijo: "",
+      telefonomovil: "",
     },
   });
+
+  const tipoComprobante = form.watch("tipoComprobante");
+  const tipoDocumento = form.watch("tipoDocumento");
 
   useEffect(() => {
     loadHabitaciones();
   }, []);
 
-  const tipoComprobante = form.watch("tipoComprobante");
-  const tipoDocumento = form.watch("tipoDocumento");
+  useEffect(() => {
+    const subscription = form.watch(async (value, { name }) => {
+      if (
+        name === "nrodoc" &&
+        tipoComprobante === "BOLETA" &&
+        tipoDocumento === "DNI" &&
+        value.nrodoc?.length === 8
+      ) {
+        const datos = await consultaDNI(value.nrodoc);
+        if (datos) {
+          form.setValue("nombres", datos.nombres);
+          form.setValue("apellidoPaterno", datos.apellidoPaterno);
+          form.setValue("apellidoMaterno", datos.apellidoMaterno);
+        }
+      }
+      if (
+        name === "nrodoc" &&
+        tipoComprobante === "FACTURA" &&
+        tipoDocumento === "RUC" &&
+        value.nrodoc?.length === 11
+      ) {
+        const datos = await consultaRUC(value.nrodoc);
+        if (datos) {
+          form.setValue("razonSocial", datos.razonSocial);
+          form.setValue("direccionFacturacion", datos.direccion);
+        }
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [form, tipoComprobante, tipoDocumento]);
+
+  async function consultaDNI(dni: string) {
+    const url =
+      location.protocol === "https:"
+        ? "https://facturae-garzasoft.com/facturacion/buscaCliente/BuscaCliente2.php"
+        : "http://facturae-garzasoft.com/facturacion/buscaCliente/BuscaCliente2.php";
+    try {
+      const response = await fetch(
+        `${url}?dni=${dni}&fe=N&token=qusEj_w7aHEpX`
+      );
+      const data = await response.json();
+      if (data && data.nombres && data.apepat && data.apemat) {
+        return {
+          nombres: data.nombres.trim(),
+          apellidoPaterno: data.apepat.trim(),
+          apellidoMaterno: data.apemat.trim(),
+          fechanac: data.fecnac,
+        };
+      }
+      return null;
+    } catch (error) {
+      console.error("Error al obtener datos del DNI:", error);
+      return null;
+    }
+  }
+
+  async function consultaRUC(ruc: string) {
+    const url =
+      location.protocol === "https:"
+        ? "https://comprobante-e.com/facturacion/buscaCliente/BuscaClienteRuc.php"
+        : "http://comprobante-e.com/facturacion/buscaCliente/BuscaClienteRuc.php";
+    try {
+      const response = await fetch(
+        `${url}?fe=N&token=qusEj_w7aHEpX&ruc=${ruc}`
+      );
+      const data = await response.json();
+      if (data && data.RazonSocial) {
+        return {
+          razonSocial: data.RazonSocial.trim(),
+          direccion: data.Direccion?.trim() || "",
+        };
+      }
+      return null;
+    } catch (error) {
+      console.error("Error al obtener datos del RUC:", error);
+      return null;
+    }
+  }
 
   const onSubmit = async (data: ReservationFormValues) => {
     const precio = Number(room.tipohabitacion.precio);
     const dateFormatted = format(dateFrom, "yyyy-MM-dd");
-
     const newReservation: ReservaRequest = {
       sucursal_id: SUCURSAL,
       fechavencimiento: dateFormatted,
@@ -141,19 +238,28 @@ export default function ReservationForm({ room }: Props) {
       comentario: "Reserva desde la web",
       habitacion_id: habitacion?.id,
       persona: {
-        nombres:
-          tipoComprobante === "BOLETA"
-            ? data.nombres!
-            : data.razonSocial || "Sin nombre",
-        apellidos:
-          tipoComprobante === "BOLETA" && tipoDocumento === "DNI"
-            ? `${data.apellidoPaterno} ${data.apellidoMaterno}`
-            : "-",
+        nombres: data.nombres || "-",
+        apellidos: `${data.apellidoPaterno || "-"} ${
+          data.apellidoMaterno || "-"
+        }`,
         nrodoc: data.nrodoc,
         telefono: data.telefono,
         email: data.email,
-        direccion: data.address ?? "-",
+        direccion: data.address || "-",
       },
+      persona_facturacion:
+        data.tipoComprobante === "FACTURA"
+          ? {
+              nombres: data.razonSocial || "Sin nombre",
+              apellidos: "-",
+              nrodoc: data.nrodoc,
+              telefono: data.telefonomovil,
+              telefonofijo: data.telefonofijo || "-",
+              telefonomovil: data.telefonomovil,
+              email: data.email,
+              direccion: data.direccionFacturacion || "-",
+            }
+          : undefined,
     };
 
     try {
@@ -182,32 +288,9 @@ export default function ReservationForm({ room }: Props) {
         </div>
         <Form {...form}>
           <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
-            <FormField
-              control={form.control}
-              name="tipoComprobante"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Tipo de Comprobante</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Selecciona comprobante" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="BOLETA">Boleta</SelectItem>
-                      <SelectItem value="FACTURA">Factura</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="space-y-4 border rounded-md p-4">
+              <h4 className="font-semibold text-lg">Datos del Titular</h4>
 
-            {tipoComprobante === "BOLETA" && (
               <FormField
                 control={form.control}
                 name="tipoDocumento"
@@ -233,129 +316,267 @@ export default function ReservationForm({ room }: Props) {
                   </FormItem>
                 )}
               />
-            )}
 
-            <FormField
-              control={form.control}
-              name="nrodoc"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Nro. Documento</FormLabel>
-                  <FormControl>
-                    <Input placeholder="DNI o RUC" maxLength={11} {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {tipoComprobante === "BOLETA" && tipoDocumento === "DNI" && (
-              <>
-                <FormField
-                  control={form.control}
-                  name="nombres"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Nombres</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Nombres" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="apellidoPaterno"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Apellido Paterno</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Apellido paterno" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="apellidoMaterno"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Apellido Materno</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Apellido materno" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              </>
-            )}
-
-            {tipoComprobante === "FACTURA" && (
               <FormField
                 control={form.control}
-                name="razonSocial"
+                name="nrodoc"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Razón Social</FormLabel>
+                    <FormLabel>Nro. Documento</FormLabel>
                     <FormControl>
-                      <Input placeholder="Razón Social" {...field} />
+                      <Input
+                        placeholder="Documento"
+                        maxLength={11}
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-            )}
 
-            <FormField
-              control={form.control}
-              name="direccionFacturacion"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Dirección de Facturación</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Dirección de Facturación" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+              <FormField
+                control={form.control}
+                name="nombres"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Nombres</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Nombres" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input type="email" placeholder="Email" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="apellidoPaterno"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Apellido Paterno</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Apellido paterno" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="apellidoMaterno"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Apellido Materno</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Apellido materno" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
 
-            <FormField
-              control={form.control}
-              name="telefono"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Teléfono</FormLabel>
-                  <FormControl>
-                    <PhoneInput
-                      defaultCountry="PE"
-                      placeholder="Número de teléfono"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
+              <FormField
+                control={form.control}
+                name="telefono"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Teléfono</FormLabel>
+                    <FormControl>
+                      <PhoneInput
+                        defaultCountry="PE"
+                        placeholder="Número de teléfono"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input type="email" placeholder="Email" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="address"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Dirección</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Dirección actual" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            {/* COMPROBANTE Y DATOS DE FACTURACIÓN */}
+            <div className="space-y-4 border rounded-md p-4">
+              <h4 className="font-semibold text-lg">Datos de Facturación</h4>
+
+              <FormField
+                control={form.control}
+                name="tipoComprobante"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Tipo de Comprobante</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecciona comprobante" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="BOLETA">Boleta</SelectItem>
+                        <SelectItem value="FACTURA">Factura</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {tipoComprobante === "BOLETA" && (
+                <FormField
+                  control={form.control}
+                  name="nrodoc"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>DNI</FormLabel>
+                      <FormControl>
+                        <Input placeholder="DNI" maxLength={8} {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               )}
-            />
+
+              {tipoComprobante === "FACTURA" && (
+                <>
+                  <FormField
+                    control={form.control}
+                    name="tipoDocumento"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Tipo de Documento</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Selecciona tipo documento" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="DNI">DNI</SelectItem>
+                            <SelectItem value="RUC">RUC</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="nrodoc"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Nro. Documento</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="DNI o RUC"
+                            maxLength={11}
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="razonSocial"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Razón Social</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Razón Social" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="direccionFacturacion"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Dirección de Facturación</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Dirección" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="telefonofijo"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Teléfono Fijo</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Teléfono fijo" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="telefonomovil"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Teléfono Móvil</FormLabel>
+                        <FormControl>
+                          <PhoneInput
+                            defaultCountry="PE"
+                            placeholder="Teléfono móvil"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </>
+              )}
+            </div>
 
             <Button
               type="submit"

@@ -17,13 +17,16 @@ export default function RenderRoomCard({
   description: string;
   imageSrc: string;
 }) {
-  const { dateFrom } = useReservaStore();
+  const { dateFrom, dateTo } = useReservaStore();
 
-  const dateFormatted = format(dateFrom, "yyyy-MM-dd");
+  const dateFromFormatted = format(dateFrom, "yyyy-MM-dd");
+  const dateToFormatted = format(dateTo, "yyyy-MM-dd");
 
   return (
     <div className="rounded-md overflow-hidden border border-gray-200 group">
-      <Link href={`/habitaciones/${dateFormatted}/${id}`}>
+      <Link
+        href={`/habitaciones/${dateFromFormatted}/${dateToFormatted}/${id}`}
+      >
         <div className="relative h-80">
           <Image
             src={`${BASE_URL}/${imageSrc}`}

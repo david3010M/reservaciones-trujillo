@@ -1,12 +1,14 @@
-import { CircleCheck } from "lucide-react";
+import * as LucideReact from "lucide-react";
 import { HabitacionDisponibleResponseData } from "./lib/habitaciondisponible.interface";
+import { AmenitiesResponse } from "./lib/amenities.interface";
 
 interface Props {
   room: HabitacionDisponibleResponseData;
   date: string;
+  amenities: AmenitiesResponse | null;
 }
 
-export default function DescriptionHabitacion({ room }: Props) {
+export default function DescriptionHabitacion({ room, amenities }: Props) {
   return (
     <div className="w-full lg:w-1/2">
       <div className="uppercase text-xs font-poppins font-semibold tracking-widest text-hotel-gray mb-2">
@@ -24,23 +26,20 @@ export default function DescriptionHabitacion({ room }: Props) {
       <div className="py-8">
         {/* Amenities */}
         <div className="grid grid-cols-2 gap-4 mb-8">
-          {room.tipohabitacion.descripcion.map((amenity, index) => (
-            <div key={index} className="flex items-center">
-              <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center mr-2">
-                <CircleCheck className="h-4 w-4 text-white" />
+          {amenities?.data.map((amenity, index) => {
+            const Icon = LucideReact["CircleCheck"] as React.ComponentType<any>;
+            return (
+              <div key={index} className="flex items-center">
+                <div className="w-8 h-8 aspect-square rounded-full bg-primary flex items-center justify-center mr-2">
+                  <Icon className="h-4 w-4 text-white" />
+                </div>
+                <span className="text-sm uppercase font-semibold">
+                  {amenity.nombre}
+                </span>
               </div>
-              <span className="text-sm uppercase font-semibold">{amenity}</span>
-            </div>
-          ))}
+            );
+          })}
         </div>
-
-        {/* Reserve Button */}
-        {/* <Link
-                    href={`/habitaciones/${date}/${room.tipohabitacion.id}/reservar`}
-                    className="block w-full bg-[#74562e] text-white py-3 px-4 rounded-md text-center uppercase tracking-wider font-medium hover:bg-[#5c4523] transition-colors"
-                >
-                    Reservar ahora
-                </Link> */}
       </div>
     </div>
   );
