@@ -12,13 +12,9 @@ export default function ReservationDetails({ room }: Props) {
   const { dateFrom, dateTo, people, getNights, habitacionId } =
     useReservaStore();
 
-  console.log("room", room, habitacionId);
-
   const habitacion = room.habitaciones.find(
     (habitacion) => habitacion.id === habitacionId
   );
-
-  console.log("Habitación seleccionada:", habitacion);
 
   const nights = getNights();
 
@@ -35,12 +31,16 @@ export default function ReservationDetails({ room }: Props) {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
           <div className="border-l-2 border-hotel-gold pl-2">
-            <h4 className="font-bold font-poppins mb-2">Ingreso</h4>
-            <p>{formatDate(dateFrom)}</p>
+            <h4 className="font-bold font-poppins mb-2">CHECK IN</h4>
+            <p>
+              {formatDate(dateFrom)} <strong>desde 14:00</strong>
+            </p>
           </div>
           <div className="border-l-2 border-hotel-gold pl-2">
-            <h4 className="font-bold font-poppins mb-2">Salida</h4>
-            <p>{formatDate(dateTo)}</p>
+            <h4 className="font-bold font-poppins mb-2">CHECK OUT</h4>
+            <p>
+              {formatDate(dateTo)} <strong>hasta 12:00</strong>
+            </p>
           </div>
         </div>
 

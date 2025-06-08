@@ -31,9 +31,16 @@ const useHabitacionStore = create<HabitacionState>((set) => ({
     const dateFrom = isValidDate
       ? dateFromStorage
       : date || new Date().toISOString().slice(0, 10);
+    const dateToStorage = localStorage.getItem("dateTo");
+    const isValidDateTo = dateToStorage && isValid(parseISO(dateToStorage));
+    const dateTo = isValidDateTo
+      ? dateToStorage
+      : new Date(new Date(dateFrom).getTime() + 24 * 60 * 60 * 1000)
+          .toISOString()
+          .slice(0, 10);
     const data = await getHabitacionesDisponible({
       fechaDesde: dateFrom,
-      fechaHasta: dateFrom,
+      fechaHasta: dateTo,
     });
     set({ habitaciones: data, loading: false });
   },

@@ -50,3 +50,12 @@ export async function getHabitacionDisponible({
   );
   return data;
 }
+
+export async function getAmenities(
+  idTipoHabitacion: string
+): Promise<AmenitiesResponse> {
+  const { data } = await api.get<AmenitiesResponse>(
+    `/amenities/tipo-habitacion/${idTipoHabitacion}`
+  );
+  return data;
+}

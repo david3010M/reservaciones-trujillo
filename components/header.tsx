@@ -40,23 +40,6 @@ export default function Header() {
             <Phone className="inline mr-1 size-2 sm:size-4" />
             +51 999999999
           </div>
-          <div className="hidden md:flex items-center gap-2">
-            <Button
-              variant="link"
-              size="sm"
-              className="text-white text-[8px] md:text-xs h-fit"
-            >
-              Inicia Sesión
-            </Button>
-            |
-            <Button
-              variant="link"
-              size="sm"
-              className="text-white text-[8px] md:text-xs h-fit"
-            >
-              Regístrate
-            </Button>
-          </div>
         </div>
       </div>
 

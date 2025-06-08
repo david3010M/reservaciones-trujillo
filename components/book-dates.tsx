@@ -20,7 +20,6 @@ import { Input } from "./ui/input";
 import { TipoHabitacionResponse } from "./tipohabitacion/lib/tipohabitacion.interface";
 import useReservaStore from "./reserva/lib/reserva.store";
 import { useRouter } from "next/navigation";
-import { NavigateOptions } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 interface Props {
   tiposHabitacion: TipoHabitacionResponse;
@@ -28,10 +27,16 @@ interface Props {
 
 export default function BookDates({ tiposHabitacion }: Props) {
   const { dateFrom, dateTo, setDateFrom, setDateTo } = useReservaStore();
+  const [code, setCode] = useState<string>("");
   const { push } = useRouter();
 
   const searchHabitacion = () => {
-    push("/habitaciones");
+    if (code.trim() === "") {
+      push("/habitaciones");
+    } else {
+      const numericCode = code.replace(/\D/g, ""); // Eliminar caracteres no numéricos
+      push(`/reservacion/${numericCode}`);
+    }
   };
 
   return (
@@ -153,6 +158,13 @@ export default function BookDates({ tiposHabitacion }: Props) {
             type="text"
             placeholder="Ingresa tu código"
             className="flex-grow border-none !text-sm py-2 px-4"
+            value={code}
+            onChange={(e) => {
+              const numericValue = e.target.value.replace(/\D/g, "");
+              setCode(numericValue);
+            }}
+            inputMode="numeric"
+            pattern="[0-9]*"
           />
           <Button
             className="bg-hotel-gold text-white py-2 px-6 rounded-md"

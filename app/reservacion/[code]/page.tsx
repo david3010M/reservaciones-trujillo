@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
+import StepIndicator from "@/components/step-indicator";
 
 export const dynamic = "force-dynamic";
 
@@ -40,6 +41,11 @@ export default async function ConfirmacionPage({ params }: PageProps) {
       {/* Confirmation Content */}
       <section className="py-12 bg-white">
         <div className="container mx-auto px-4 max-w-screen-lg">
+          <div className="pb-8">
+            <div className="container mx-auto px-4">
+              <StepIndicator currentStep={"confirmacion"} />
+            </div>
+          </div>
           <div className="flex flex-col md:flex-row items-baseline gap-2 mb-2">
             <h1 className="text-xl md:text-2xl font-poppins font-bold">
               El estado de tu reserva
