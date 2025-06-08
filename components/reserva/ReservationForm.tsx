@@ -69,6 +69,9 @@ const reservationSchema = z
       .refine((val) => isValidPhoneNumber(val), {
         message: "Número inválido",
       }),
+    nombreCompleto: z.string().optional(),
+    numeroDocumento: z.string().optional(),
+    emailPersona: z.string().email("Email inválido").optional(),
   })
   .superRefine((data, ctx) => {
     if (!data.tipoDocumento) {
@@ -134,11 +137,13 @@ export default function ReservationForm({ room }: Props) {
       address: "",
       telefonofijo: "",
       telefonomovil: "",
+      nombreCompleto: "",
+      numeroDocumento: "",
+      emailPersona: "",
     },
   });
 
   const tipoComprobante = form.watch("tipoComprobante");
-  const tipoDocumento = form.watch("tipoDocumento");
 
   useEffect(() => {
     loadHabitaciones();
@@ -147,25 +152,28 @@ export default function ReservationForm({ room }: Props) {
   useEffect(() => {
     const subscription = form.watch(async (value, { name }) => {
       if (
-        name === "nrodoc" &&
+        name === "numeroDocumento" &&
         tipoComprobante === "BOLETA" &&
-        tipoDocumento === "DNI" &&
-        value.nrodoc?.length === 8
+        value.numeroDocumento?.length === 8
       ) {
-        const datos = await consultaDNI(value.nrodoc);
+        const datos = await consultaDNI(value.numeroDocumento);
         if (datos) {
-          form.setValue("nombres", datos.nombres);
-          form.setValue("apellidoPaterno", datos.apellidoPaterno);
-          form.setValue("apellidoMaterno", datos.apellidoMaterno);
+          form.setValue(
+            "nombreCompleto",
+            datos.nombres +
+              " " +
+              datos.apellidoPaterno +
+              " " +
+              datos.apellidoMaterno
+          );
         }
       }
       if (
-        name === "nrodoc" &&
+        name === "numeroDocumento" &&
         tipoComprobante === "FACTURA" &&
-        tipoDocumento === "RUC" &&
-        value.nrodoc?.length === 11
+        value.numeroDocumento?.length === 11
       ) {
-        const datos = await consultaRUC(value.nrodoc);
+        const datos = await consultaRUC(value.numeroDocumento);
         if (datos) {
           form.setValue("razonSocial", datos.razonSocial);
           form.setValue("direccionFacturacion", datos.direccion);
@@ -173,7 +181,7 @@ export default function ReservationForm({ room }: Props) {
       }
     });
     return () => subscription.unsubscribe();
-  }, [form, tipoComprobante, tipoDocumento]);
+  }, [form, tipoComprobante]);
 
   async function consultaDNI(dni: string) {
     const url =
@@ -252,14 +260,23 @@ export default function ReservationForm({ room }: Props) {
           ? {
               nombres: data.razonSocial || "Sin nombre",
               apellidos: "-",
-              nrodoc: data.nrodoc,
+              nrodoc: data.numeroDocumento || data.nrodoc,
               telefono: data.telefonomovil,
               telefonofijo: data.telefonofijo || "-",
               telefonomovil: data.telefonomovil,
-              email: data.email,
+              email: data.emailPersona || "-",
               direccion: data.direccionFacturacion || "-",
             }
-          : undefined,
+          : {
+              nombres: data.nombreCompleto || "Sin nombre",
+              apellidos: "-",
+              nrodoc: data.numeroDocumento || data.nrodoc,
+              telefono: data.telefonomovil,
+              telefonofijo: data.telefonofijo || "-",
+              telefonomovil: data.telefonomovil,
+              email: data.emailPersona || "-",
+              direccion: data.direccionFacturacion || "-",
+            },
     };
 
     try {
@@ -455,68 +472,55 @@ export default function ReservationForm({ room }: Props) {
               />
 
               {tipoComprobante === "BOLETA" && (
-                <FormField
-                  control={form.control}
-                  name="nrodoc"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>DNI</FormLabel>
-                      <FormControl>
-                        <Input placeholder="DNI" maxLength={8} {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <>
+                  <FormField
+                    control={form.control}
+                    name="numeroDocumento"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>DNI</FormLabel>
+                        <FormControl>
+                          <Input placeholder="DNI" maxLength={8} {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="nombreCompleto"
+                    disabled
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Nombres Completos</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Nombres Completos" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </>
               )}
 
               {tipoComprobante === "FACTURA" && (
                 <>
                   <FormField
                     control={form.control}
-                    name="tipoDocumento"
+                    name="numeroDocumento"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Tipo de Documento</FormLabel>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Selecciona tipo documento" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value="DNI">DNI</SelectItem>
-                            <SelectItem value="RUC">RUC</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="nrodoc"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Nro. Documento</FormLabel>
+                        <FormLabel>RUC</FormLabel>
                         <FormControl>
-                          <Input
-                            placeholder="DNI o RUC"
-                            maxLength={11}
-                            {...field}
-                          />
+                          <Input placeholder="RUC" maxLength={11} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-
                   <FormField
                     control={form.control}
+                    disabled
                     name="razonSocial"
                     render={({ field }) => (
                       <FormItem>
@@ -528,59 +532,76 @@ export default function ReservationForm({ room }: Props) {
                       </FormItem>
                     )}
                   />
-
-                  <FormField
-                    control={form.control}
-                    name="direccionFacturacion"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Dirección de Facturación</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Dirección" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="telefonofijo"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Teléfono Fijo</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Teléfono fijo" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="telefonomovil"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Teléfono Móvil</FormLabel>
-                        <FormControl>
-                          <PhoneInput
-                            defaultCountry="PE"
-                            placeholder="Teléfono móvil"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
                 </>
               )}
+
+              <FormField
+                control={form.control}
+                name="direccionFacturacion"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Dirección de Facturación</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Dirección" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="emailPersona"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input type="email" placeholder="Email" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="telefonofijo"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Teléfono Fijo</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Teléfono fijo" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="telefonomovil"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Teléfono Móvil</FormLabel>
+                    <FormControl>
+                      <PhoneInput
+                        defaultCountry="PE"
+                        placeholder="Teléfono móvil"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
+
+            <pre>{JSON.stringify(form.getValues(), null, 2)}</pre>
 
             <Button
               type="submit"
-              className="w-full bg-primary text-white py-3 rounded-md font-medium"
+              disabled={!form.formState.isValid}
+              className="w-full bg-primary text-white py-3 rounded-md font-medium ripple-xl"
             >
               Reservar
             </Button>
