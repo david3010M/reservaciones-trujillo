@@ -27,7 +27,7 @@ export default function DescriptionHabitacion({ room, amenities }: Props) {
         {/* Amenities */}
         <div className="grid grid-cols-2 gap-4 mb-8">
           {amenities?.data.map((amenity, index) => {
-            const Icon = LucideReact["CircleCheck"] as React.ComponentType<any>;
+            const Icon = LucideReact[amenity.icon] as React.ComponentType<any>;
             return (
               <div key={index} className="flex items-center">
                 <div className="w-8 h-8 aspect-square rounded-full bg-primary flex items-center justify-center mr-2">

@@ -22,8 +22,32 @@ import {
 } from "@/components/salones/lib/salon.interface";
 import useReservaSalonStore from "@/components/salones/lib/reservaSalon.store";
 import { createReservationSalon } from "@/components/salones/lib/salon.actions";
-import { reservationSchema } from "../reserva/ReservationForm";
 import { PhoneInput } from "../phone-input";
+import { isValidPhoneNumber } from "react-phone-number-input";
+
+const reservationSchema = z.object({
+  nrodoc: z
+    .string()
+    .nonempty("Debes ingresar tu documento")
+    .regex(/^[0-9]+$/, { message: "Solo se permiten números" })
+    .refine((val) => val.length === 8 || val.length === 11, {
+      message: "Documento inválido",
+    }),
+  nombres: z.string().optional(),
+  apellidoPaterno: z.string().optional(),
+  apellidoMaterno: z.string().optional(),
+  email: z.string().email("Email inválido"),
+  telefono: z
+    .string()
+    .min(6, "Número inválido")
+    .regex(/^\+?[0-9]+$/, {
+      message: "Solo se permiten números",
+    })
+    .refine((val) => isValidPhoneNumber(val), {
+      message: "Número inválido",
+    }),
+  address: z.string().optional(),
+});
 
 type ReservationFormValues = z.infer<typeof reservationSchema>;
 
@@ -62,7 +86,7 @@ export default function ReservationForm({ id, packageSalon }: Props) {
       nropersonas: people,
       comentario: "Reserva de salón desde la web",
       persona: {
-        nombres: data.nombres,
+        nombres: data.nombres ?? " ",
         apellidos: `${data.apellidoPaterno} ${data.apellidoMaterno}`,
         nrodoc: data.nrodoc,
         telefono: data.telefono,
@@ -205,6 +229,7 @@ export default function ReservationForm({ id, packageSalon }: Props) {
                 )}
               />
               <Button
+                disabled={!form.formState.isValid}
                 type="submit"
                 className="w-full bg-primary text-white py-3 rounded-md font-medium ripple-xl"
               >

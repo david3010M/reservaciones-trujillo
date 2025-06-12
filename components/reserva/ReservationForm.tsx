@@ -32,7 +32,7 @@ import { HabitacionesDisponibleResponseData } from "../tipohabitacion/lib/habita
 import { isValidPhoneNumber } from "react-phone-number-input";
 import { PhoneInput } from "../phone-input";
 
-const reservationSchema = z
+export const reservationSchema = z
   .object({
     tipoComprobante: z.enum(["BOLETA", "FACTURA"]),
     tipoDocumento: z.enum(["DNI", "CE", "PASAPORTE", "RUC"]).optional(),
@@ -59,17 +59,26 @@ const reservationSchema = z
         message: "Número inválido",
       }),
     address: z.string().optional(),
-    telefonofijo: z.string().optional(),
-    telefonomovil: z
+    telefonofijo: z
       .string()
-      .min(6, "Número inválido")
-      .regex(/^\+?[0-9]+$/, {
+      .optional()
+      .refine((val) => !val || /^\+?[0-9]+$/.test(val), {
         message: "Solo se permiten números",
       })
-      .refine((val) => isValidPhoneNumber(val), {
+      .refine((val) => !val || isValidPhoneNumber(val), {
+        message: "Número inválido",
+      }),
+    telefonomovil: z
+      .string()
+      .optional()
+      .refine((val) => !val || /^\+?[0-9]+$/.test(val), {
+        message: "Solo se permiten números",
+      })
+      .refine((val) => !val || isValidPhoneNumber(val), {
         message: "Número inválido",
       }),
     nombreCompleto: z.string().optional(),
+    apellidoCompleto: z.string().optional(),
     numeroDocumento: z.string().optional(),
     emailPersona: z.string().email("Email inválido").optional(),
   })
@@ -138,9 +147,12 @@ export default function ReservationForm({ room }: Props) {
       telefonofijo: "",
       telefonomovil: "",
       nombreCompleto: "",
+      apellidoCompleto: "",
       numeroDocumento: "",
       emailPersona: "",
     },
+    mode: "onChange",
+    reValidateMode: "onChange",
   });
 
   const tipoComprobante = form.watch("tipoComprobante");
@@ -158,13 +170,10 @@ export default function ReservationForm({ room }: Props) {
       ) {
         const datos = await consultaDNI(value.numeroDocumento);
         if (datos) {
+          form.setValue("nombreCompleto", datos.nombres);
           form.setValue(
-            "nombreCompleto",
-            datos.nombres +
-              " " +
-              datos.apellidoPaterno +
-              " " +
-              datos.apellidoMaterno
+            "apellidoCompleto",
+            `${datos.apellidoPaterno} ${datos.apellidoMaterno}`
           );
         }
       }
@@ -258,22 +267,22 @@ export default function ReservationForm({ room }: Props) {
       persona_facturacion:
         data.tipoComprobante === "FACTURA"
           ? {
-              nombres: data.razonSocial || "Sin nombre",
-              apellidos: "-",
+              nombres: data.razonSocial || " ",
+              apellidos: " ",
               nrodoc: data.numeroDocumento || data.nrodoc,
-              telefono: data.telefonomovil,
+              telefono: data.telefonomovil ?? "-",
               telefonofijo: data.telefonofijo || "-",
-              telefonomovil: data.telefonomovil,
+              telefonomovil: data.telefonomovil ?? "-",
               email: data.emailPersona || "-",
               direccion: data.direccionFacturacion || "-",
             }
           : {
-              nombres: data.nombreCompleto || "Sin nombre",
-              apellidos: "-",
+              nombres: data.nombreCompleto || " ",
+              apellidos: data.apellidoCompleto || " ",
               nrodoc: data.numeroDocumento || data.nrodoc,
-              telefono: data.telefonomovil,
+              telefono: data.telefonomovil ?? "-",
               telefonofijo: data.telefonofijo || "-",
-              telefonomovil: data.telefonomovil,
+              telefonomovil: data.telefonomovil ?? "-",
               email: data.emailPersona || "-",
               direccion: data.direccionFacturacion || "-",
             },
@@ -492,9 +501,23 @@ export default function ReservationForm({ room }: Props) {
                     disabled
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Nombres Completos</FormLabel>
+                        <FormLabel>Nombres</FormLabel>
                         <FormControl>
-                          <Input placeholder="Nombres Completos" {...field} />
+                          <Input placeholder="Nombres" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="apellidoCompleto"
+                    disabled
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Apellidos</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Apellidos" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -570,7 +593,11 @@ export default function ReservationForm({ room }: Props) {
                   <FormItem>
                     <FormLabel>Teléfono Fijo</FormLabel>
                     <FormControl>
-                      <Input placeholder="Teléfono fijo" {...field} />
+                      <PhoneInput
+                        defaultCountry="PE"
+                        placeholder="Teléfono fijo"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -595,8 +622,6 @@ export default function ReservationForm({ room }: Props) {
                 )}
               />
             </div>
-
-            <pre>{JSON.stringify(form.getValues(), null, 2)}</pre>
 
             <Button
               type="submit"
