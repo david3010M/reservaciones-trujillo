@@ -64,12 +64,21 @@ const useReservaStore = create<ReservaState>((set, get) => ({
     const storedDateTo = localStorage.getItem("dateTo");
     const storedHabitacionId = localStorage.getItem("habitacionId");
 
-    const dateFrom = storedDateFrom
+    let dateFrom = storedDateFrom
       ? parse(storedDateFrom, "yyyy-MM-dd", new Date())
       : today;
-    const dateTo = storedDateTo
+    let dateTo = storedDateTo
       ? parse(storedDateTo, "yyyy-MM-dd", new Date())
       : tomorrow;
+
+    // Si las fechas son menores que hoy, usar hoy o mañana
+    if (dateFrom < today) {
+      dateFrom = today;
+    }
+    if (dateTo <= dateFrom) {
+      dateTo = new Date(dateFrom);
+      dateTo.setDate(dateFrom.getDate() + 1);
+    }
     const people = storedPeople ? Number(storedPeople) : 1;
 
     set({
