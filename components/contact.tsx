@@ -70,7 +70,7 @@ export default function Contact() {
       primaryColor: "#74562E",
       secondaryColor: "#fae9d1",
       foreground: "#000000",
-      emails: ["hvaldiviezos@unprg.edu.pe"],
+      emails: ["Administración@hotelrecepcionestrujillo.com"],
       values: Object.entries(data).map(([key, value]) => ({
         key:
           DictionaryFormFields[key as keyof typeof DictionaryFormFields] || key,
