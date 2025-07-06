@@ -20,12 +20,38 @@ export default function QuienesSomos() {
       value: "historia",
       image: "/nosotros/historia.jpg",
       content: (
-        <div className="text-sm text-justify">
-          <p className="mb-6">
-            In publishing and graphic design, Lorem ipsum is a placeholder text
-            commonly used to demonstrate the visual form of a document or a
-            typeface without relying on meaningful content. Lorem ipsum may be
-            used as a placeholder before final copy is available.
+        <div className="text-sm text-justify space-y-2">
+          <p>
+            <strong>Hotel Recepciones Trujillo</strong> nació con el firme
+            propósito de brindar a los visitantes de la ciudad de Trujillo un
+            espacio acogedor, elegante y funcional, donde el buen servicio y la
+            hospitalidad sean el sello distintivo.
+          </p>
+
+          <p>
+            Fundado en el <strong>2023</strong>, el hotel fue concebido como un
+            proyecto familiar que buscaba unir dos pasiones: el arte de recibir
+            y la organización de momentos inolvidables. Con esfuerzo, visión y
+            dedicación, se consolidó una propuesta de valor que combina cómodas
+            habitaciones con servicios integrales para recepciones, eventos
+            sociales y corporativos.
+          </p>
+          <p>
+            Ubicado en una de las zonas más accesibles de{" "}
+            <strong>Trujillo</strong>, el hotel ha crecido con el tiempo sin
+            perder la esencia de su atención cálida y personalizada.
+          </p>
+          <p>
+            A lo largo de los años, Hotel Recepciones Trujillo ha ampliado su
+            infraestructura, diversificado sus servicios y capacitado
+            constantemente a su personal, con el objetivo de ofrecer
+            experiencias memorables que reflejen los valores de calidad,
+            compromiso y responsabilidad.
+          </p>
+          <p>
+            Hoy, seguimos trabajando con pasión para seguir siendo parte de los
+            momentos importantes de nuestros clientes: ya sea una estadía
+            placentera, una boda soñada o un evento corporativo exitoso.
           </p>
         </div>
       ),
@@ -35,15 +61,17 @@ export default function QuienesSomos() {
       value: "mision",
       image: "/nosotros/mision.jpg",
       content: (
-        <div>
-          <p className="text-sm">
-            Brindar servicios de hospedaje y organización de eventos con altos
-            estándares de calidad, garantizando experiencias únicas y
-            satisfactorias para nuestros clientes. Nos dirigimos a viajeros de
-            negocios, turistas, familias y empresas que buscan un servicio
-            confiable, cómodo y exclusivo. Nos enfocamos en ofrecer atención
-            personalizada, comodidad y excelencia en cada detalle, contribuyendo
-            al desarrollo turístico y empresarial de Trujillo
+        <div className="space-y-4 text-justify">
+          <p>
+            Brindar a nuestros huéspedes y clientes una experiencia única de
+            hospitalidad, comodidad y atención personalizada, a través de
+            servicios de alojamiento y organización de recepciones que superen
+            sus expectativas.
+          </p>
+          <p>
+            Nos enfocamos en ofrecer calidad, puntualidad y calidez,
+            garantizando un ambiente seguro y agradable en cada estancia o
+            celebración.
           </p>
         </div>
       ),
@@ -53,13 +81,16 @@ export default function QuienesSomos() {
       value: "vision",
       image: "/nosotros/vision.jpg",
       content: (
-        <div>
-          <p className="text-sm">
-            Ser el hotel y centro de recepciones líder en Trujillo, reconocido
-            por nuestra excelencia en servicio, innovación y compromiso con la
-            satisfacción del cliente. Aspiramos a expandir nuestra oferta y
-            consolidarnos como un referente en la industria hotelera y de
-            eventos a nivel regional y nacional.
+        <div className="text-justify space-y-4">
+          <p>
+            Ser reconocidos como uno de los hoteles líderes en Trujillo en
+            servicios de hospedaje y recepciones, destacando por nuestra
+            excelencia operativa, innovación y compromiso con la satisfacción
+            del cliente.
+          </p>
+          <p>
+            Aspiramos a consolidarnos como la primera opción para quienes buscan
+            calidad, confianza y momentos memorables en la ciudad.
           </p>
         </div>
       ),
@@ -70,43 +101,63 @@ export default function QuienesSomos() {
       image: "/nosotros/valores.jpg",
       content: (
         <div>
-          <p className="text-xs">
-            Los valores corporativos son los principios fundamentales que guían
-            el comportamiento y la toma de decisiones de una empresa.
-            Representan las creencias, ética y cultura organizacional que
-            definen la identidad y personalidad de la compañía.
-          </p>
-          <ul className="space-y-4 text-xs mb-6 list-none pl-0">
-            {[
-              {
-                description:
-                  "La amabilidad es un valor esencial en Recepciones Trujillo, ya que contribuye a crear un ambiente acogedor y agradable para cada cliente.",
-              },
-              {
-                description:
-                  "La excelencia en recepciones y hoteles se logra a través de una atención al cliente impecable, infraestructura de calidad y una experiencia gastronómica de alto nivel.",
-              },
-              {
-                description:
-                  "La innovación es clave para el crecimiento y la diferenciación en cualquier sector. Representa la capacidad de crear, mejorar y adaptar soluciones que aporten valor y marquen la diferencia.",
-              },
-              {
-                description:
-                  "El compromiso es la base para ofrecer un servicio de calidad en recepciones y hoteles en Trujillo.",
-              },
-            ].map((value, index) => (
-              <div key={index} className="flex items-start gap-4">
-                {value.description}
-              </div>
-            ))}
-          </ul>
+          <div className="gap-x-8 gap-y-4 text-sm grid grid-cols-1 md:grid-cols-2 text-justify">
+            <div>
+              <p className="text-base font-semibold text-hotel-brown">Calidad</p>
+              <p>
+                Nos esforzamos por ofrecer un servicio impecable en todos
+                nuestros espacios y procesos, garantizando confort, limpieza y
+                excelencia en cada detalle.
+              </p>
+            </div>
+            <div>
+              <p className="text-base font-semibold text-hotel-brown">Atención al cliente</p>
+              <p>
+                La satisfacción de nuestros huéspedes y clientes es nuestra
+                prioridad. Brindamos un trato cálido, respetuoso y personalizado
+                en todo momento.
+              </p>
+            </div>
+            <div>
+              <p className="text-base font-semibold text-hotel-brown">Responsabilidad</p>
+              <p>
+                Cumplimos con nuestros compromisos con integridad y seriedad,
+                tanto frente a nuestros clientes como a nuestros colaboradores y
+                proveedores.
+              </p>
+            </div>
+            <div>
+              <p className="text-base font-semibold text-hotel-brown">Compromiso</p>
+              <p>
+                Damos lo mejor de nosotros en cada tarea, con pasión y
+                dedicación, buscando siempre superar las expectativas de quienes
+                confían en nuestros servicios.
+              </p>
+            </div>
+            <div>
+              <p className="text-base font-semibold text-hotel-brown">Innovación</p>
+              <p>
+                Nos adaptamos a las nuevas tendencias del sector hotelero y de
+                eventos, incorporando mejoras continuas que enriquezcan la
+                experiencia de nuestros clientes.
+              </p>
+            </div>
+            <div>
+              <p className="text-base font-semibold text-hotel-brown">Trabajo en equipo</p>
+              <p>
+                Fomentamos un ambiente de colaboración y respeto entre todos los
+                miembros del equipo, lo que nos permite brindar un servicio
+                coordinado, eficiente y humano.
+              </p>
+            </div>
+          </div>
         </div>
       ),
     },
   };
 
   return (
-    <div className="max-w-screen-md mx-auto py-12 px-4 md:px-6 overflow-hidden">
+    <div className="max-w-screen-lg mx-auto py-12 px-4 md:px-6 overflow-hidden">
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 mb-16 items-center border border-hotel-gold min-h-96 p-8">
         <div className="flex flex-col items-center justify-start h-full col-span-3">
           <div className="w-full">
