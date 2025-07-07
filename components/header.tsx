@@ -4,7 +4,6 @@ import { Phone, MapPin, Menu } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { Button } from "./ui/button";
 
 const menuItemsLeft = [
   { href: "/", label: "Inicio" },
@@ -34,11 +33,11 @@ export default function Header() {
         <div className="flex items-center gap-4 py-0.5">
           <div>
             <MapPin className="inline mr-1 size-2 sm:size-4" />
-            Av. España 1234, Trujillo, Perú
+            Av. Tahuantinsuyo 814, La Esperanza – Trujillo
           </div>
           <div>
             <Phone className="inline mr-1 size-2 sm:size-4" />
-            +51 999999999
+            +51 906250017
           </div>
         </div>
       </div>

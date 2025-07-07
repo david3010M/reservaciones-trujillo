@@ -12,7 +12,7 @@ export default function Footer() {
     { label: "Restaurante", link: "/restaurante" },
   ];
   const linksColumn2 = [
-    { label: "Evento", link: "/eventos" },
+    { label: "Salones", link: "/eventos" },
     { label: "Galería", link: "/galeria" },
     { label: "Contacto", link: "/contacto" },
   ];
