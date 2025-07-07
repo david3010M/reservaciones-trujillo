@@ -14,6 +14,7 @@ import Header from "@/components/header";
 import Footer from "@/components/footer";
 import ReservaInitializer from "@/components/ReservaInitializer";
 import { Toaster } from "sonner";
+import ButtonWhatsApp from "@/components/button-whatsapp";
 
 // Poppins font for body text
 const poppins = Poppins({
@@ -85,6 +86,7 @@ export default function RootLayout({
           {/* Footer */}
           <Footer />
           <Toaster />
+          <ButtonWhatsApp />
           <ReservaInitializer />
         </main>
       </body>
