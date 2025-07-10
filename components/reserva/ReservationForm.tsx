@@ -93,7 +93,7 @@ export const reservationSchema = z
     if (data.tipoComprobante === "BOLETA" && data.tipoDocumento === "DNI") {
       if (!data.nombres || !data.apellidoPaterno || !data.apellidoMaterno) {
         ctx.addIssue({
-          path: ["nombres"],
+          path: ["nombreCompleto"],
           code: z.ZodIssueCode.custom,
           message: "Nombres y apellidos requeridos",
         });
@@ -243,6 +243,10 @@ export default function ReservationForm({ room }: Props) {
   const onSubmit = async (data: ReservationFormValues) => {
     const precio = Number(room.tipohabitacion.precio);
     const dateFormatted = format(dateFrom, "yyyy-MM-dd");
+    // Solo deja los 9 últimos dígitos del teléfono
+    const cleanPhone = (phone?: string) =>
+      phone ? phone.replace(/\D/g, "").slice(-9) : "-";
+
     const newReservation: ReservaRequest = {
       sucursal_id: SUCURSAL,
       fechavencimiento: dateFormatted,
@@ -260,7 +264,7 @@ export default function ReservationForm({ room }: Props) {
           data.apellidoMaterno || "-"
         }`,
         nrodoc: data.nrodoc,
-        telefono: data.telefono,
+        telefono: cleanPhone(data.telefono),
         email: data.email,
         direccion: data.address || "-",
       },
@@ -270,9 +274,9 @@ export default function ReservationForm({ room }: Props) {
               nombres: data.razonSocial || " ",
               apellidos: " ",
               nrodoc: data.numeroDocumento || data.nrodoc,
-              telefono: data.telefonomovil ?? "-",
-              telefonofijo: data.telefonofijo || "-",
-              telefonomovil: data.telefonomovil ?? "-",
+              telefono: cleanPhone(data.telefonomovil),
+              telefonofijo: cleanPhone(data.telefonofijo),
+              telefonomovil: cleanPhone(data.telefonomovil),
               email: data.emailPersona || "-",
               direccion: data.direccionFacturacion || "-",
             }
@@ -280,9 +284,9 @@ export default function ReservationForm({ room }: Props) {
               nombres: data.nombreCompleto || " ",
               apellidos: data.apellidoCompleto || " ",
               nrodoc: data.numeroDocumento || data.nrodoc,
-              telefono: data.telefonomovil ?? "-",
-              telefonofijo: data.telefonofijo || "-",
-              telefonomovil: data.telefonomovil ?? "-",
+              telefono: cleanPhone(data.telefonomovil),
+              telefonofijo: cleanPhone(data.telefonofijo),
+              telefonomovil: cleanPhone(data.telefonomovil),
               email: data.emailPersona || "-",
               direccion: data.direccionFacturacion || "-",
             },
