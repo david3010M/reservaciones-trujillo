@@ -23,9 +23,6 @@ interface Props {
 export default function ReservationDetails({salon, packageSalon}: Props) {
     const {dateFrom, setDateFrom, people, setPeople} = useReservaSalonStore();
 
-    const formatDate = (date: Date) => {
-        return `${date.getDate()} Marzo ${date.getFullYear()}`;
-    };
 
     return (
         <div className="col-start-1 row-start-2 md:col-span-2 md:row-start-2">

@@ -19,7 +19,21 @@ export default function ReservationDetails({ room }: Props) {
   const nights = getNights();
 
   const formatDate = (date: Date) => {
-    return `${date.getDate()} Marzo ${date.getFullYear()}`;
+    const months = [
+      "Enero",
+      "Febrero",
+      "Marzo",
+      "Abril",
+      "Mayo",
+      "Junio",
+      "Julio",
+      "Agosto",
+      "Septiembre",
+      "Octubre",
+      "Noviembre",
+      "Diciembre",
+    ];
+    return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
   };
 
   return (
